@@ -1,0 +1,30 @@
+name: "mysql"
+
+deployment:
+  replicas: 1
+  container:
+    name: mysql
+    image:
+      name: percona
+      tag: latest
+    port: 3306
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysql-secret
+            key: password
+
+service:
+  port: 3306
+  targetPort: 3306
+  nodePort: 30001
+
+
+secret:
+  password: password123
+  username: root
+
+configMap:
+  name: mysqlConfigMap
+  

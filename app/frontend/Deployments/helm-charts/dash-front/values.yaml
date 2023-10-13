@@ -1,0 +1,30 @@
+
+replicaCount: 1
+
+image:
+  repository:  __registryAddress__/__imageName__
+  pullPolicy: IfNotPresent
+  tag: __imageTag__
+
+
+privateRegistry:
+  enabled: true
+
+# dash-dev.ultratone.global
+domainsNpaths:
+  frontend:
+    url: web-dev.ultratone.global
+    path: /
+
+service:
+  type: ClusterIP
+  port: 80
+
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

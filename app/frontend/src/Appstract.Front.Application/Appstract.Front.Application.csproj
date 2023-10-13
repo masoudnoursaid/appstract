@@ -1,0 +1,97 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Appstract.Front.Application</RootNamespace>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="libphonenumber-csharp" Version="8.13.6" />
+      <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="2.0.3" />
+      <PackageReference Include="RESTCountries.NET" Version="3.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Appstract.Front.Domain\Appstract.Front.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Common\Resources\UserProfileResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>UserProfileResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Common\Resources\DialogResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AlertResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Common\Resources\AlertResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AlertResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Common\Resources\PhoneInputResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PhoneInputResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Common\Resources\PaymentMethodResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PaymentMethodResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Common\Resources\SubMenuResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SubMenuResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Common\Resources\PurchaseHistoryResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PurchaseHistoryResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Common\Resources\TopupVoucherResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>TopupVoucherResource.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Common\Resources\UserProfileResource.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>UserProfileResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Common\Resources\AlertResource.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>AlertResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Common\Resources\AlertResource.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>AlertResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Common\Resources\PhoneInputResource.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>PhoneInputResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Common\Resources\PaymentMethodResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PaymentMethodResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Common\Resources\SubMenuResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>SubMenuResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Common\Resources\PurchaseHistoryResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PurchaseHistoryResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Common\Resources\TopupVoucherResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>TopupVoucherResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+</Project>

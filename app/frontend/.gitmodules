@@ -1,0 +1,3 @@
+[submodule "botbank-grpc-client"]
+	path = botbank-grpc-client
+	url = git@ssh.dev.azure.com:v3/basketasia/BotBank/botbank-grpc-client

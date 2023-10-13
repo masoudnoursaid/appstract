@@ -1,0 +1,120 @@
+﻿parameters:
+  - name: dotnetVersion
+    type: string
+  - name: certPfxPath
+    type: string
+  - name: certPfxPass
+    type: string
+
+
+
+steps:
+  # We need to clean up the docker profile for payment in pool
+  - script: |
+      numberOfPs=$(docker ps -q | wc -l)
+      zero=0
+      payment_IMG_KEY_NAME=payment.platform
+      
+      if [ "$numberOfPs" -eq "$zero" ]; then
+      echo "No ps to stop"
+      else
+      echo "Stopping $numberOfPs container(s)"
+      docker stop $(docker ps -a -q)
+      fi
+      
+      numberOfContainers=$(docker container ls -a -q | wc -l)
+      
+      if [ "$numberOfContainers" -eq "$zero" ]; then
+      echo "No container to remove"
+      else
+      echo "Removing $numberOfContainers container(s)"
+      docker container rm $(docker container ls -a -q)
+      fi
+      
+      
+      numberOfImages=$( (docker images | grep "$payment_IMG_KEY_NAME" | tr -s ' ' | cut -d ' ' -f 3) | wc -l )
+      
+      if [ "$numberOfImages" -eq "$zero" ]; then
+      echo "No img to remove"
+      else
+      echo "Removing $numberOfImages img(s)"
+      docker rmi -f $(docker images | grep "$payment_IMG_KEY_NAME" | tr -s ' ' | cut -d ' ' -f 3)
+      fi
+      
+      
+      numberOfVolume=$( docker volume ls -q | wc -l )
+      
+      if [ "$numberOfVolume" -eq "$zero" ]; then
+      echo "No volume to remove"
+      else
+      echo "Removing $numberOfVolume volume(s)"
+      docker volume rm $(docker volume ls -q )
+      fi
+      
+      
+      echo "Docker cleaning up is done at $(date)"
+
+    displayName: 'docker cleanup'
+    
+    # All values here is just for test
+  - script: |
+      echo "
+      DB_APP_HOST=mysql
+      DB_APP_PORT=3306
+      DB_APP_NAME=payment
+      DB_APP_USER=root
+      DB_APP_PASS=Kdnxhska8i3i
+      DB_INIT=true
+
+      SENTRY_DSN=$(SENTRY_DSN_PROTECTED)
+      SENTRY_ENVIRONMENT=
+
+      CERT_PFX_PATH=${{ parameters.certPfxPath }}
+      CERT_PFX_PASS=${{ parameters.certPfxPass }}
+      
+      PAYPAL_SANDBOX_CLIENT_ID=$(PAYPAL_SANDBOX_CLIENT_ID)
+      PAYPAL_SANDBOX_CLIENT_SECRET=$(PAYPAL_SANDBOX_CLIENT_SECRET)
+      PAYPAL_LIVE_CLIENT_ID=NAN
+      PAYPAL_LIVE_CLIENT_SECRET=NAN
+      
+      GLOBAL_PAYMENT_HOST=localhost
+      GLOBAL_PAYMENT_PORT=7025
+      GLOBAL_PAYMENT_SCHEMA=https
+      
+      BILLPLZ_SANDBOX_API_KEY=$(BILLPLZ_SANDBOX_API_KEY)
+      BILLPLZ_SANDBOX_COL_ID=$(BILLPLZ_SANDBOX_COL_ID)
+      BILLPLZ_SANDBOX_SIG_KEY=$(BILLPLZ_SANDBOX_SIG_KEY)
+      BILLPLZ_API_KEY=NAN
+      BILLPLZ_COL_ID=NAN
+      BILLPLZ_SIG_KEY=NAN
+      
+      STRIPE_SANDBOX_SECRET_KEY=$(STRIPE_SANDBOX_SECRET_KEY)
+      STRIPE_SANDBOX_PUBLISHABLE_KEY=$(STRIPE_SANDBOX_PUBLISHABLE_KEY)
+      STRIPE_SECRET_KEY=NAN
+      STRIPE_PUBLISHABLE_KEY=NAN
+      
+      TEST_SEED_UP=true
+      TEST_DB_CLEAN_UP=true
+      TEST_INSECURE=true
+      " > .env
+    displayName: 'setup .env'
+
+  - script: |
+      docker-compose up -d
+    displayName: 'docker compose up'
+
+  - script: |
+      docker exec payment_app_api_container ls
+    displayName: 'ls for cert.pfx'
+
+
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Test payment.platform.sln'
+    inputs:
+      command: 'test'
+      version: ${{ parameters.dotnetVersion }}
+      projects: 'payment.Platform.sln'
+      publishTestResults: false
+      arguments: ' --environment INSECURE_TEST=true '
+      workingDirectory: '.'

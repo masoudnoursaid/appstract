@@ -1,0 +1,24 @@
+﻿@attribute [Route(ROUTE)]
+
+<DashboardWrapper>
+    <Body>
+    <div class="d-flex">
+        <FinancialMenu CloseMenuClicked="CloseSecondLayer"/>
+        <SubMenu Class="@(_isTransformed ? "-transform100 second-submenu" : "second-submenu")"
+                 Title="@PaymentMethodResource.ChoosePaymentMethod" Typo="mb-4 typo__med500--3 color-neutral--400">
+            <ChildContent>
+                <PaymentMethodList GetPaymentMethods="@GetPaymentMethodsAsync"
+                                   OnChangePaymentMethod="@UpdatePaymentMethod"/>
+            </ChildContent>
+        </SubMenu>
+        <div class="buy-credit__content">
+            <div class="app__content--inner my-8 buy-credit">
+                <CascadingValue Value="@_selectedPaymentMethod">
+                    <CreditAmount CreatePayment="@CreatePaymentAsync"/>
+                </CascadingValue>
+            </div>
+        </div>
+    </div>
+    </Body>
+</DashboardWrapper>
+

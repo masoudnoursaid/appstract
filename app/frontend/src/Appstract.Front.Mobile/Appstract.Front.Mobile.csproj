@@ -1,0 +1,199 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net7.0;net7.0-android;net7.0-ios</TargetFrameworks>
+        <!--        <TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net7.0-ios</TargetFrameworks>-->
+        <OutputType Condition="'$(TargetFramework)' != 'net7.0'">Exe</OutputType>
+        <RootNamespace>Appstract.Front.Mobile</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <!-- Display name -->
+        <ApplicationTitle>Appstract</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>global.Appstract.connect</ApplicationId>
+		<ApplicationIdGuid>5dba53c3-3d6c-4023-8d22-3c134d8bbaa4</ApplicationIdGuid>
+
+        <!-- Versions -->
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>1</ApplicationVersion>
+
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+        <CreatePackage>false</CreatePackage>
+        <CodesignKey>Apple Distribution: BasketAsia Sdn. Bhd. (57RT3ME474)</CodesignKey>
+        <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+        <CodesignProvision>Appstract Maui</CodesignProvision>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
+        <CreatePackage>false</CreatePackage>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- App Icon -->
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+        <!-- Splash Screen -->
+
+        <!-- Images -->
+        <MauiImage Include="Resources\Images\*" />
+        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+
+        <!-- Custom Fonts -->
+        <MauiFont Include="Resources\Fonts\*" />
+
+        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+        <MauiSplashScreen Include="Resources\Splash\ic_app.png" BaseSize="96,96" Color="#7957FF" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+        <PackageReference Include="Mopups" Version="1.1.1" />
+        <PackageReference Include="MVVMHelpers" Version="2012.4.20.3" />
+        <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+        <PackageReference Include="RESTCountries.NET" Version="3.0.1" />
+        <PackageReference Include="The49.Maui.BottomSheet" Version="1.0.1" />
+        <PackageReference Include="Sentry.Maui" Version="3.36.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources\Images\arrow_back.svg" />
+        <None Remove="Resources\Images\call.svg" />
+        <None Remove="Resources\Images\call_detail.svg" />
+        <None Remove="Resources\Images\computer.svg" />
+        <None Remove="Resources\Images\contact_page.svg" />
+        <None Remove="Resources\Images\dialpad.svg" />
+        <None Remove="Resources\Images\flash_off.svg" />
+        <None Remove="Resources\Images\history.svg" />
+        <None Remove="Resources\Images\ic_app.png" />
+        <None Remove="Resources\Images\ic_error.png" />
+        <None Remove="Resources\Images\ic_error.svg" />
+        <None Remove="Views\" />
+        <None Remove="Views\Intro\" />
+        <None Remove="Views\Login\" />
+        <None Remove="Handler\" />
+        <None Remove="Controls\" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Appstract.Front.Application\Appstract.Front.Application.csproj" />
+        <ProjectReference Include="..\Appstract.Front.Infrastructure\Appstract.Front.Infrastructure.csproj" />
+        <ProjectReference Include="..\Appstract.Mobile.Application\Appstract.Mobile.Application.csproj" />
+        <ProjectReference Include="..\Appstract.Mobile.Entities\Appstract.Mobile.Entities.csproj" />
+        <ProjectReference Include="..\Appstract.Mobile.Infrastructure\Appstract.Mobile.Infrastructure.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Controls\HomeCardItemControl.xaml.cs">
+            <DependentUpon>HomeCardItemControl.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Main\CustomerService\Pages\CustomerServicePage.xaml.cs">
+            <DependentUpon>CustomerServicePage.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Main\MainPage.xaml.cs">
+            <DependentUpon>MainPage.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Common\Modals\AlertDialog.xaml.cs">
+            <DependentUpon>AlertDialog.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Main\MainPage.xaml.cs">
+            <DependentUpon>MainPage.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <MauiXaml Update="Controls\ErrorViewControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Controls\HomeCardItemControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\BuyCredit\Components\PaymentIconsView.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\BuyCredit\Components\PaymentMethodView.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\BuyCredit\Pages\BuyCreditPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\CustomerService\Pages\CustomerServicePage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\Devices\Components\LinkDeviceButton.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\Devices\Components\TerminateTimeSelector.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\Devices\Controls\HeaderControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\Devices\Controls\SessionItemControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\Devices\Pages\DevicesPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\Devices\Pages\LoginQRCodePage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\HomePage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\ProfileSettingPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\TopupVoucher\Components\HistoryView.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\TopupVoucher\Components\SuccessfullVoucherView.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\TopupVoucher\Controls\HistoryErrorControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\TopupVoucher\Controls\VoucherEntryControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\TopupVoucher\Pages\TopupVoucherPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\MainPage.xaml">
+            <SubType>Designer</SubType>
+        </MauiXaml>
+        <MauiXaml Update="Common\Controls\ErrorViewControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Common\Modals\AlertDialog.xaml">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\Main\MainPage.xaml">
+            <SubType>Designer</SubType>
+        </MauiXaml>
+    </ItemGroup>
+    <ItemGroup>
+        <MauiPlatformSpecificFolder Remove="Platforms\MacCatalyst\" />
+        <MauiPlatformSpecificFolder Remove="Platforms\Tizen\" />
+        <MauiPlatformSpecificFolder Remove="Platforms\Windows\" />
+    </ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="Common\Controls\ErrorViewControl.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </AdditionalFiles>
+    </ItemGroup>
+    <ProjectExtensions>
+        <VisualStudio>
+            <UserProperties XamarinHotReloadDebuggerTimeoutExceptionAppstractMobilePresentationHideInfoBar="True" />
+        </VisualStudio>
+    </ProjectExtensions>
+</Project>

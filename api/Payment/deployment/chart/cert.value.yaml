@@ -1,0 +1,6 @@
+name: "cert"
+
+secret:
+  password: '4321'
+  username: ''
+  

@@ -1,0 +1,185 @@
+﻿@using Appstract.Front.Domain.Models.TopupVoucher
+<LoadingWrapper IsLoaded="@_isMainFormLoaded" Class="topup-voucher__main-loading">
+    <ContentWrapper>
+        @if (_unknownError)
+        {
+            <UnknownError OnRetry="@OnInitializedAsync"/>
+        }
+        else
+        {
+            <MudGrid Justify="Justify.Center">
+                <MudItem xs="12">
+                    <MudItem>
+                        <MudText Class="typo__reg400--5 color-neutral--500 mb-4">
+                            @TopupVoucherResource.Title
+                        </MudText>
+                    </MudItem>
+                    <MudPaper Elevation="0" Class="d-flex align-center justify-center rounded-12 pa-6">
+                        <MudGrid Spacing="0">
+                            <MudItem xs="12">
+                                <MudGrid Spacing="0" Class="d-flex align-center flex-grow-1">
+                                    @if (_submitResponse.Success)
+                                    {
+                                        <MudItem xs="12" Class="topup-voucher__alert d-flex align-center justify-center flex-column">
+                                            @((MarkupString)UltraToneIcons.TOPUP_VOUCHER_SUCCESS)
+                                            <MudText Class="color-successful--600 mt-3">
+                                                @TopupVoucherResource.SuccessTitle
+                                            </MudText>
+                                            <MudPaper Elevation="0" Width="100%" Class="pa-6 my-8 rounded-lg topup-voucher__success">
+
+                                                <div xs="12" Class="d-flex justify-space-between mb-3">
+                                                    <MudText Class="typo__reg400--2 color-neutral--500">
+                                                        @TopupVoucherResource.VoucherAmount
+                                                    </MudText>
+                                                    <MudText Class="typo__med500--2 color-neutral--900">
+                                                        @_voucherAmount
+                                                    </MudText>
+                                                </div>
+                                                @if (_isVoucherCurrencyDifferent)
+                                                {
+                                                    <div xs="12" Class="d-flex justify-space-between mb-3">
+                                                        <MudText Class="typo__reg400--2 color-neutral--500">
+                                                            @TopupVoucherResource.TopupAmount
+                                                        </MudText>
+                                                        <MudText Class="typo__med500--2 color-neutral--900">
+                                                            @_topupAmount
+                                                        </MudText>
+                                                    </div>
+                                                }
+                                                <div xs="12" Class="d-flex justify-space-between mb-3">
+                                                    <MudText Class="typo__reg400--2 color-neutral--500">
+                                                        @TopupVoucherResource.BalanceBefore
+                                                    </MudText>
+                                                    <MudText Class="typo__med500--2 color-neutral--900">
+                                                        @_balanceBefore
+                                                    </MudText>
+                                                </div>
+                                                <div xs="12" Class="d-flex justify-space-between">
+                                                    <MudText Class="typo__reg400--2 color-neutral--500">
+                                                        @TopupVoucherResource.BalanceAfter
+                                                    </MudText>
+                                                    <MudText Class="typo__med500--2 color-neutral--900">
+                                                        @_balanceAfter
+                                                    </MudText>
+                                                </div>
+                                            </MudPaper>
+                                            <MudButton
+                                                Class="ultratone-btn topup-voucher__new-voucher-button"
+                                                Color="Color.Primary"
+                                                Variant="Variant.Filled"
+                                                OnClick="@NewVoucher"
+                                                FullWidth="true"
+                                                DisableElevation="true">
+                                                @TopupVoucherResource.NewVoucher
+                                            </MudButton>
+
+                                        </MudItem>
+                                    }
+                                    else
+                                    {
+                                        <MudGrid Spacing="1" Class="voucher__form">
+                                            <MudItem xs="8">
+                                                <MudText Class="typo__reg400--2 color-neutral-700">
+                                                    @TopupVoucherResource.EnterPin
+                                                </MudText>
+                                                <MudTextField
+                                                    Class="topup-voucher__pin-input mt-2"
+                                                    @bind-Text="@_pinNumber"
+                                                    T="string"
+                                                    Mask="@(new PatternMask("0000  0000  0000  0000"))"
+                                                    Placeholder="0000  0000  0000  0000"
+                                                    Clearable="true"
+                                                    Variant="Variant.Outlined"
+                                                    Margin="Margin.Dense"
+                                                    ValueChanged="PinInputValueChanged"
+                                                    UserAttributes="@(new Dictionary<string, object> { { "name", "topup-voucher__pin-input" } })"
+                                                    FullWidth="true"/>
+                                            </MudItem>
+                                            <MudItem xs="4">
+                                                <MudButton
+                                                    Class="ultratone-btn topup-voucher__submit-button"
+                                                    Color="Color.Primary"
+                                                    Variant="Variant.Filled"
+                                                    Disabled="_isSubmitBtnDisable"
+                                                    OnClick="@Submit"
+                                                    UserAttributes="@(new Dictionary<string, object> { { "name", "topup-voucher__submit-button" } })"
+                                                    FullWidth="true"
+                                                    DisableElevation="true">
+                                                    @TopupVoucherResource.Submit
+                                                </MudButton>
+                                            </MudItem>
+                                            @if (_submitResponse.Error.Code != default)
+                                            {
+                                                <MudItem xs="12" Class="topup-voucher__alert mt-4">
+                                                    <AlertMessage
+                                                        Class="topup-voucher__error"
+                                                        Show="true"
+                                                        ErrorCode="@_submitResponse.Error.FormattedCode"
+                                                        Message="@_submitResponse.Error.Message"
+                                                        Type="@_submitResponse.Error.FormattedType"/>
+                                                </MudItem>
+                                            }
+                                        </MudGrid>
+                                    }
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Class="typo__reg400--5 color-neutral--500 mb-4">
+                        @TopupVoucherResource.History
+                    </MudText>
+
+                    @if (!_executedVouchersListResponse.Success)
+                    {
+                        <MudItem xs="12" Class="topup-voucher__alert pt-0">
+                            <AlertMessage
+                                Class="topup-voucher__error py-0"
+                                Show="@(_executedVouchersListResponse.Error.Code != default)"
+                                ErrorCode="@_executedVouchersListResponse.Error.FormattedCode"
+                                Message="@_executedVouchersListResponse.Error.Message"
+                                Type="@_executedVouchersListResponse.Error.FormattedType"/>
+                        </MudItem>
+                    }
+
+                    <MudTable ServerData="ReloadServerData"
+                              @ref="@_executedVouchersTable"
+                              T="ExecutedVoucher"
+                              RowsPerPage="_executedVouchersListFilter.PageSize"
+                              CurrentPage="@(_executedVouchersListFilter.PageNumber - 1)"
+                              Loading="_isExecutedVouchersListLoading"
+                              LoadingProgressColor="Color.Primary"
+                              Class="@($"ultratone-table topup-voucher__executed-vouchers-table {(_tablePagesCount > 0 ? string.Empty : "ultratone-table--empty")}")">
+                        <LoadingContent>
+                            <div class="topup-voucher__executed-vouchers-loading">
+                                @TopupVoucherResource.LoadingBarTitle
+                            </div>
+                        </LoadingContent>
+                        <NoRecordsContent>
+                            @((MarkupString)UltraToneIcons.LIST_IS_EMPTY)
+                            <MudText Class="mt-4 typo__reg400--5 color-neutral--500">
+                                @TopupVoucherResource.NoVoucherUsed
+                            </MudText>
+                        </NoRecordsContent>
+                        <HeaderContent>
+                            <MudTh>@TopupVoucherResource.Credit</MudTh>
+                            <MudTh>@TopupVoucherResource.Serial</MudTh>
+                            <MudTh>@TopupVoucherResource.Currency</MudTh>
+                            <MudTh>@TopupVoucherResource.UsedDateTime </MudTh>
+                        </HeaderContent>
+                        <RowTemplate Context="item">
+                            <MudTd DataLabel="@TopupVoucherResource.Credit">@item.Credit.ToFormattedString(item.Currency, BaseInfo.UserCulture, false)</MudTd>
+                            <MudTd DataLabel="@TopupVoucherResource.Serial">@item.Serial</MudTd>
+                            <MudTd DataLabel="@TopupVoucherResource.Currency">@item.Currency</MudTd>
+                            <MudTd DataLabel="@TopupVoucherResource.UsedDateTime">@item.UsedDate.ToTimeZoneString(BaseInfo.UserTimeZone, false)</MudTd>
+                        </RowTemplate>
+                        <PagerContent>
+                            <TablePagination @bind-SelectedPage="@_executedVouchersListFilter.PageNumber" PagesCount="_tablePagesCount"/>
+                        </PagerContent>
+                    </MudTable>
+                </MudItem>
+            </MudGrid>
+        }
+    </ContentWrapper>
+</LoadingWrapper>

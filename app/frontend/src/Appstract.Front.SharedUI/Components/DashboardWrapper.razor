@@ -1,0 +1,63 @@
+﻿@using Appstract.Front.Application.Common.Resources
+@using Appstract.Front.Application.Common.Constants
+@inherits LayoutComponentBase
+
+<div class="app__container">
+    <div class="app__bar">
+        <MudAppBar Elevation="0">
+            <div class="app__bar--frame d-flex justify-space-between">
+                <div class="mt-3">
+                    @((MarkupString)UltraToneIcons.ULTRA_TONE_LOGO)
+                </div>
+                <MudBreadcrumbs Items="@BreadcrumbsItems" Class="ultratone-breadcrumb"/>
+                <div class="d-flex align-center gap-6">
+                    <MudIcon Icon="@UltraToneIcons.NOTIFICATION_S" Color="Color.Default" Size="Size.Small"/>
+                    <AdminChat/>
+                    <MudMenu Icon="@UltraToneIcons.ACCOUNT_CIRCLE"
+                             Class="mx-n4 account typo__reg400--2 rounded-12"
+                             Size="Size.Large"
+                             DisableElevation="true"
+                             AnchorOrigin="Origin.BottomCenter"
+                             TransformOrigin="Origin.TopRight">
+                        <MudMenuItem Icon="@UltraToneIcons.PERSON"
+                                     Class="account__profile-setting"
+                                     OnTouch="@(() => NavigationManager.NavigateTo(Routes.PERSONAL_INFO))"
+                                     OnClick="@(() => NavigationManager.NavigateTo(Routes.PERSONAL_INFO))">
+                            <MudText Class="typo__reg400--2 color-neutral--600">
+                                @DashboardWrapperResource.PersonalInfo
+                            </MudText>
+                        </MudMenuItem>
+                        <MudMenuItem Icon="@UltraToneIcons.LOGOUT"
+                                     IconColor="Color.Error"
+                                     Class="account__logout"
+                                     OnTouch="@(async () => { await OnLogoutClick(); })"
+                                     OnClick="@(async () => { await OnLogoutTouch(); })">
+                            <MudText Color="Color.Error" Class="typo__reg400--2 color-neutral--600">
+                                @DashboardWrapperResource.Logout
+                            </MudText>
+                        </MudMenuItem>
+                    </MudMenu>
+                </div>
+
+            </div>
+        </MudAppBar>
+    </div>
+
+    <div class="app__content bg-light">
+        <MudPaper Elevation="0" Class="rounded-0 px-2 py-8 nav-menu">
+            <MudNavMenu Margin="Margin.Dense" Color="Color.Dark">
+                <MudNavLink Href="#" Match="NavLinkMatch.Prefix" Class="nav-menu__items">
+                    <MudIcon Icon="@(IsNavLinkActive(Routes.DASHBOARD) ? UltraToneIcons.FILLED_DASHBOARD : UltraToneIcons.DASHBOARD)"/>
+                    <MudText>@DashboardWrapperResource.Dashboard</MudText>
+                </MudNavLink>
+                <MudNavLink Href="@Routes.BUY_CREDIT" Match="NavLinkMatch.Prefix" Class="nav-menu__items">
+                    <MudIcon Icon="@(IsNavLinkActive(Routes.BUY_CREDIT) ? UltraToneIcons.FILLED_FINANCE_CHIP : UltraToneIcons.FINANCE_CHIP)"/>
+                    <MudText>@DashboardWrapperResource.Financial</MudText>
+                </MudNavLink>
+            </MudNavMenu>
+        </MudPaper>
+        <div class="@($"{Class} app__content--inner")">
+            @Body
+        </div>
+    </div>
+</div>

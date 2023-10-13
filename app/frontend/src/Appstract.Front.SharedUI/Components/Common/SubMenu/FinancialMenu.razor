@@ -1,0 +1,35 @@
+﻿
+
+<SubMenu Class="first-submenu pa-6"
+         CloseMenuClicked="CloseMenuClicked"
+         Title="@DashboardWrapperResource.Financial"
+         Typo="typo__med500--3 color-neutral--400">
+    <ChildContent>
+        <MudNavMenu Margin="Margin.Dense"
+                    Color="Color.Dark"
+                    Rounded="true"
+                    Class="mt-4">
+            <MudNavLink Href="@Routes.BUY_CREDIT"
+                        Icon="@UltraToneIcons.PAYMENTS">
+                @SubMenuResource.BuyCredit
+            </MudNavLink>
+            @* <MudNavLink Href="@Routes.INVOICES" Disabled="true" *@
+            @*             Icon="@UltraToneIcons.RECEIPT_LONG"> *@
+            @*     @SubMenuResource.Invoices *@
+            @* </MudNavLink> *@
+            <MudNavLink Href="@Routes.TOP_UP_VOUCHER"
+                        Icon="@UltraToneIcons.LOCAL_ACTIVITY">
+                @SubMenuResource.VoucherTopup
+            </MudNavLink>
+            <MudNavLink Href="@Routes.PURCHASE_HISTORY"
+                        Icon="@UltraToneIcons.HISTORY">
+                @SubMenuResource.PurchaseHistory
+            </MudNavLink>
+        </MudNavMenu>
+    </ChildContent>
+</SubMenu>
+
+@code{
+    [Parameter]
+    public EventCallback<bool> CloseMenuClicked { get; set; }
+}

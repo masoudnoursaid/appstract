@@ -1,0 +1,28 @@
+@using Appstract.Front.Domain.Enums
+@using Appstract.Front.Application.Common.Resources
+
+<div class="@Class">
+    @if (IsLoaded)
+    {
+        <div class="content-wrapper">
+            @if (HasError)
+            {
+                <AlertMessage
+                    Type="@Error.FormattedType"
+                    Show="@(Error.Code != default)"
+                    ErrorCode="@Error.FormattedCode"
+                    Message="@Error.Message"/>
+            }
+            @ContentWrapper
+        </div>
+    }
+    else
+    {
+        <div class="loading-wrapper">
+            <MudText Color="Color.Primary" Class="my-4" Align="Align.Center">
+                @LoadingWrapperResource.PleaseWait
+            </MudText>
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-4"/>
+        </div>
+    }
+</div>

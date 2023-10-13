@@ -1,0 +1,16 @@
+parameters:
+- name: destination
+  type: string
+
+steps:
+
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: Replace tokens
+  inputs:
+    rootDirectory: '${{ parameters.destination }}'
+    targetFiles: |
+      Chart.yaml
+      values.yaml
+    keepToken: true
+    tokenPrefix: __
+    tokenSuffix: __

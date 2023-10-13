@@ -1,0 +1,24 @@
+@using System.Reflection
+@using BlazorApplicationInsights
+@using Microsoft.AspNetCore.Components.Authorization
+@using Appstract.Front.Domain.Models.ApiRequestModels;
+@using Appstract.SharedUI.Shared
+@inject NavigationManager Navigation
+<ApplicationInsightsComponent />
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Main).Assembly" AdditionalAssemblies="new [] { typeof(MainLayout).Assembly }">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <Authorizing>
+                    <text>Please wait, we are authorizing you.</text>
+                </Authorizing>
+                <NotAuthorized>
+                    <RedirectToLogin />
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <NotFoundPage />
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

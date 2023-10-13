@@ -1,0 +1,37 @@
+﻿<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudTextField Immediate="true"
+                      @bind-Value="@SearchText"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      Margin="Margin.Dense"
+                      IconSize="Size.Small"
+                      Class="mr-2 ml-2 country-selection__search-input"
+                      AdornmentIcon="@Icons.Material.Filled.Search"/>
+        <MudContainer Style="height: 300px; width: 400px; overflow-y: auto;">
+            <MudPaper Elevation="0">
+                <MudList Clickable="true" Dense="true">
+                    @foreach (var item in FilteredCountries)
+                    {
+                        <MudListItem Button="true" OnClick="() => SelectCountry(item)">
+                            <MudGrid>
+                                <MudItem xs="10">
+                                    <div class="d-flex align-center" style="width: fit-content">
+                                        <MudImage Src="@item.Flag.Svg" Width="25" Height="18" Elevation="0" Class="rounded-lg mr-5"/>
+                                        <MudText Typo="Typo.caption" Class="flex-auto d-flex">@item.Name.Common</MudText>
+                                    </div>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudText Typo="Typo.caption" Class="flex-auto d-flex" Align="Align.Right"> @(GetCountryCode(item))</MudText>
+                                </MudItem>
+                            </MudGrid>
+                        </MudListItem>
+                    }
+                </MudList>
+            </MudPaper>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@DialogResource.CloseButton</MudButton>
+    </DialogActions>
+</MudDialog>

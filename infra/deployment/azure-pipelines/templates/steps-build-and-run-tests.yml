@@ -1,0 +1,26 @@
+parameters:
+- name: dotnetVersion
+  type: string
+- name: nugetServiceConnectionName
+  type: string
+
+steps:
+- task: NuGetAuthenticate@1
+  displayName: 'NuGet Authenticate'
+  inputs:
+    nugetServiceConnectionNames: ${{ parameters.nugetServiceConnectionName }}
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build my-project.sln'
+  inputs:
+    command: 'build'
+    version: ${{ parameters.dotnetVersion }}
+    projects: 'my-project.sln'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test my-project.sln'
+  inputs:
+    command: 'test'
+    version: ${{ parameters.dotnetVersion }}
+    projects: 'my-project.sln'
+    publishTestResults: false

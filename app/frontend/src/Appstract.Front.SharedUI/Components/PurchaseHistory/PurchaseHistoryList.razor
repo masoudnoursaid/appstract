@@ -1,0 +1,139 @@
+﻿@using Appstract.Front.Domain.Models.PurchaseHistory
+
+@if (_unknownError)
+{
+    <UnknownError OnRetry="@(() => _unknownError = false)"/>
+}
+else
+{
+    <MudGrid Spacing="0">
+        <MudItem xs="6" Class="d-flex justify-start pa-0">
+            <MudText Class="typo__med500--5 color-neutral--600">@PurchaseHistoryResource.Title</MudText>
+        </MudItem>
+        <MudItem xs="6" Class="d-flex justify-end pa-0">
+            <MudButton OnClick="() => _table.ReloadServerData()" Variant="Variant.Outlined" Class="table-refresh-btn mr-3">
+                <MudIcon Icon="@UltraToneIcons.REFRESH" Class="color-neutral--700"/>
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" OnClick="@(() => _showFilters = !_showFilters)"
+                       Class=@($"d-flex align-center justify-center table-filter__main-hide-show-btn{(_showFilters ? " table-filter__main-hide-show-btn--active" : string.Empty)}")>
+                <MudIcon Icon="@UltraToneIcons.FILTER_ALT" Class="mr-2"/>
+                <MudText Class="">@TableFiltersResource.Filter</MudText>
+            </MudButton>
+        </MudItem>
+        @if (_showFilters)
+        {
+            <div class="table-filter__container mt-4">
+                <div class="d-flex flex-nowrap gap-1 overflow-auto">
+                    <DateRangeTableFilter
+                        Title="@TableFiltersResource.Dates"
+                        @bind-Dates="_dates"
+                        ReloadTable="() => _table.ReloadServerData()"
+                        Class="purchase-history__filter-date-btn"/>
+                    <EnumTableFilter Title="@PurchaseHistoryResource.Status"
+                                     @bind-SelectedValues="@_selectedStatuses"
+                                     ReloadTable="@(() => _table.ReloadServerData())"
+                                     Class="purchase-history__filter-status-btn"/>
+                </div>
+                <div>
+                    <MudButton Variant="Variant.Outlined" Disabled="@_isClearFiltersBtnDisabled"
+                               Class=@($"flex-none table-filter__clear-filters {(_isClearFiltersBtnDisabled ? string.Empty : "table-filter__clear-filters--active")}")
+                               OnClick="ClearFilters">
+                        <MudIcon Icon="@UltraToneIcons.DELETE"/>
+                    </MudButton>
+                </div>
+            </div>
+        }
+        <MudItem xs="12" Class="pa-0 my-3">
+            <AlertMessage
+                Type="@_error.FormattedType"
+                Show="@(_error.Code != default)"
+                ErrorCode="@_error.FormattedCode"
+                Message="@_error.Message"/>
+        </MudItem>
+        <MudItem xs="12" Class="d-flex align-center justify-center flex-column pa-0">
+            <MudTable ServerData="ReloadServerData"
+                      @ref="@_table"
+                      T="PurchaseHistoryModel"
+                      RowsPerPage="Filter.PageSize"
+                      CurrentPage="@(Filter.PageNumber - 1)"
+                      Loading="_isTableLoading"
+                      LoadingProgressColor="Color.Primary"
+                      Breakpoint="Breakpoint.Sm"
+                      HorizontalScrollbar="true"
+                      Class=@($"ultratone-table purchase-history-list {(_tablePagesCount > 0 ? string.Empty : "ultratone-table--empty")}")>
+                <LoadingContent>
+                    <div class="purchase-history__loading-indicator">
+                        @PurchaseHistoryResource.LoadingBarTitle
+                    </div>
+                </LoadingContent>
+                <NoRecordsContent>
+                    @((MarkupString)UltraToneIcons.LIST_IS_EMPTY)
+                    <MudText Class="mt-4 typo__reg400--5 color-neutral--500">@PurchaseHistoryResource.ThereIsNoPurchaseHistoryToReview</MudText>
+                </NoRecordsContent>
+                <HeaderContent>
+                    <MudTh>@PurchaseHistoryResource.PaymentMethod</MudTh>
+                    <MudTh>@PurchaseHistoryResource.Date</MudTh>
+                    <MudTh>@PurchaseHistoryResource.TransactionId</MudTh>
+                    <MudTh>@PurchaseHistoryResource.ExternalReferenceId</MudTh>
+                    <MudTh>@PurchaseHistoryResource.Status</MudTh>
+                    <MudTh Class="text-align-right">@PurchaseHistoryResource.BalanceBefore</MudTh>
+                    <MudTh Class="text-align-right">@PurchaseHistoryResource.BalanceAfter</MudTh>
+                    <MudTh Class="text-align-right">@PurchaseHistoryResource.PurchaseAmount</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate Context="item">
+                    <MudTd DataLabel="@PurchaseHistoryResource.PaymentMethod">
+                        <div class="d-flex align-center">
+                            @if (string.IsNullOrWhiteSpace(item.LogoPath))
+                            {
+                                <MudIcon Class="mr-2" Icon="@UltraToneIcons.ACCOUNT_BALANCE" />
+                            }
+                            else
+                            {
+                                <MudImage Class="mr-2" Src="@($"{HttpClientService.GetBaseAddress()}{Configuration["ImagesPath"]}/{item.LogoPath}")"/>
+                            }
+                            <MudText Inline="true" Class="typo__reg400--3 color-neutral--900">@item.PaymentMethod</MudText>
+                        </div>
+                    </MudTd>
+                    <MudTd DataLabel="@PurchaseHistoryResource.Date">@item.Date.ToTimeZoneString(BaseInfo.UserTimeZone)</MudTd>
+                    <MudTd DataLabel="@PurchaseHistoryResource.TransactionId">
+                        <input type="hidden" value="@item.TransactionId"/>
+                        @item.TransactionId.MakeShortFromMiddle(5, 5) <CopyToClipboard Text="@item.TransactionId"/>
+                    </MudTd>
+                    <MudTd DataLabel="@PurchaseHistoryResource.ExternalReferenceId">
+                        <input type="hidden" value="@item.ExternalReference"/>
+                        @item.ExternalReference.MakeShortFromMiddle(5, 5) <CopyToClipboard Text="@item.ExternalReference"/>
+                    </MudTd>
+                    <MudTd DataLabel="@PurchaseHistoryResource.Status">
+                        <MudChip Variant="Variant.Text" Color="@GetStatusColorClass(item.Status)" Class="pa-2">
+                            <MudIcon Size="Size.Small" Icon="@GetStatusIcon(item.Status)"/>
+                            <MudText Class="typo__med500--1 ml-1" Inline="true">
+                                @item.Status.ToEnum(typeof(PaymentStatusType))?.ToDescriptionString()
+                            </MudText>
+                        </MudChip>
+                    </MudTd>
+                    <MudTd DataLabel="@PurchaseHistoryResource.BalanceBefore" Class="text-align-right">
+                        @(item.BalanceBefore is null ? string.Empty : item.BalanceBefore.ToFormattedString(item.Currency, BaseInfo.UserCulture))
+                    </MudTd>
+                    <MudTd DataLabel="@PurchaseHistoryResource.BalanceAfter" Class="text-align-right">
+                        @(item.BalanceAfter is null ? string.Empty : item.BalanceAfter.ToFormattedString(item.Currency, BaseInfo.UserCulture))
+                    </MudTd>
+                    <MudTd DataLabel="@PurchaseHistoryResource.PurchaseAmount">
+                        <div Class="d-flex align-center justify-end">
+                            @item.Amount.ToFormattedString(item.Currency, BaseInfo.UserCulture)
+                        </div>
+                    </MudTd>
+                    <MudTd Class="text-align-right">
+                        <MudIconButton Icon="@UltraToneIcons.SHARE" Size="Size.Small" Class="purchase-history__share-btn"
+                                       OnClick="@(() => ShowSharePage(item.TransactionId))"/>
+                        <MudIconButton Icon="@UltraToneIcons.INFO" Size="Size.Small" Class="purchase-history__details-btn"
+                                       OnClick="@(() => ShowDetailsPage(item.TransactionId))"/>
+                    </MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <TablePagination @bind-SelectedPage="@Filter.PageNumber" PagesCount="_tablePagesCount" Class="purchase-history__pagination"/>
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+    </MudGrid>
+}

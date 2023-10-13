@@ -1,0 +1,26 @@
+parameters:
+- name: dotnetVersion
+  type: string
+- name: nugetServiceConnectionName
+  type: string
+
+steps:
+- task: NuGetAuthenticate@1
+  displayName: 'NuGet Authenticate'
+  inputs:
+    nugetServiceConnectionNames: ${{ parameters.nugetServiceConnectionName }}
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build UltraToneFront.sln'
+  inputs:
+    command: 'build'
+    version: ${{ parameters.dotnetVersion }}
+    projects: 'UltraToneFront.sln'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test UltraToneFront.sln'
+  inputs:
+    command: 'test'
+    version: ${{ parameters.dotnetVersion }}
+    projects: 'UltraToneFront.sln'
+    publishTestResults: false

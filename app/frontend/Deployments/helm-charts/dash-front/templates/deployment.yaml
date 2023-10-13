@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dashFrontend" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "dashFrontend" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "dashFrontend" . }}
+    spec:
+      {{- if .Values.privateRegistry.enabled }}  
+      imagePullSecrets:
+      - name: {{ include "dashRegistrySecret" . }}
+      {{- end }}
+      containers:
+        - name: {{ include "dashFrontend" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Production"                                                                       

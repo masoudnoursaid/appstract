@@ -1,0 +1,31 @@
+@using Appstract.Front.SharedUI.Shared
+
+@*<CascadingAuthenticationState>
+<Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new []{typeof(MainLayout).Assembly}">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                <text>Please wait, we are authorizing you.</text>
+            </Authorizing>
+            <NotAuthorized>
+                <RedirectToLogin/>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <NotFoundPage/>
+    </NotFound>
+</Router>
+</CascadingAuthenticationState>*@
+
+
+
+<Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new []{typeof(MainLayout).Assembly}">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+        </RouteView>
+    </Found>
+    <NotFound>
+        <NotFoundPage/>
+    </NotFound>
+</Router>

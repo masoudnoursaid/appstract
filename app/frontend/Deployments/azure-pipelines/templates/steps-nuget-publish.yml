@@ -1,0 +1,21 @@
+steps:
+  - task: UseDotNet@2
+    displayName: 'Select dotnet'
+    inputs:
+      packageType: 'sdk'
+      version: $(dotnetVersion)
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack SharedUI'
+    inputs:
+      command: 'pack'
+      packagesToPack: 'src/UltraTone.SharedUI/UltraTone.SharedUI.csproj'
+      configuration: 'Release'
+      nobuild: false
+      versioningScheme: 'byEnvVar'
+      versionEnvVar: 'imageTag'
+      #buildProperties: 'PackageId=UltraTone.SharedUI'
+
+  - script: |
+      dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source gitlab
+    displayName: 'Push SharedUI packages'

@@ -1,0 +1,157 @@
+﻿@import "../Base/variables";
+.table-filter__small-close-clear-icon {
+    padding: 1px;
+}
+
+.table-filter__small-close-clear-icon svg {
+    width: 12px;
+    height: 12px;
+}
+
+.table-filter__main-hide-show-btn {
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    width: 93px;
+    height: 40px;
+    background: $color-base--white;
+    border: 1px solid $color-neutral--300;
+    border-radius: 8px;
+    min-width: 0;
+    color: $color-neutral--700;
+}
+
+.table-filter__main-hide-show-btn--active {
+    color: $color-primary--600;
+}
+
+.table-filter__clear-filters {
+    min-width: 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid $color-neutral--200;
+    color: $color-neutral--300;
+    box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+}
+
+.table-filter__clear-filters--active {
+    border: 1px solid $color-error--300;
+    color: $color-error--700;
+}
+
+.table-filter__btn {
+    border: 1px solid $color-neutral--100;
+    border-radius: 16px;
+    color: $color-neutral--400;
+    background-color: $color-base--white;
+    height: 32px;
+}
+
+.table-filter__btn--active {
+    border: 1px solid $color-primary--400;
+    border-radius: 16px;
+    color: $color-primary--600;
+    background-color: $color-primary--25;
+    height: 32px;
+}
+
+.table-filter__btn--icon {
+    width: 16px;
+    height: 16px;
+}
+
+.table-filter__popover {
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.16);
+    border-radius: 12px;
+    width: 334px;
+}
+
+.table-filter__popover-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: $color-neutral--300;
+}
+
+.table-filter__date-range-picker > div > div > div > button:nth-child(2) {
+    font-size: 1.125rem !important;
+}
+
+.table-filter__query-item {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: $color-neutral--500;
+}
+
+.table-filter__query-item::selection {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: $color-neutral--500;
+}
+
+.table-filter__container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 64px;
+    background: $color-base--white;
+    border: 1px solid $color-neutral--300;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 25px;
+    padding-right: 12px;
+}
+
+.table-filter__condition button {
+    color: $color-neutral--500;
+    text-transform: none;
+    min-width: 0;
+    padding: 0 5px 0 5px;
+}
+
+.table-filter__condition--popover {
+    width: 190px;
+    height: 64px;
+    padding: 0 4px 0 4px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px -4px #00000029;
+}
+
+.table-filter__condition--list div {
+    margin: 0;
+    padding: 1px 1px 1px 5px !important;
+    border-radius: 4px;
+}
+
+.table-filter__condition--list p {
+    text-transform: capitalize;
+}
+
+.table-filter__condition--list div:hover {
+    background-color: $color-primary--25;
+}
+
+.table-filter__date-range-picker--header-input > div {
+    border: 1px solid $color-neutral--300;
+    border-radius: 8px;
+}
+
+.table-filter__popover-items {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.table-filter__popover-item {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+}
+
+.table-filter__popover-item:hover {
+    background-color: $color-primary--50;
+}

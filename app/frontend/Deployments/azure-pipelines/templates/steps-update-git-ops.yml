@@ -1,0 +1,45 @@
+parameters:
+  - name: buildNumber
+    type: string
+    
+
+steps:
+
+# - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+#   displayName: Replace tokens
+#   inputs:
+#     rootDirectory: Deployments/helm-charts
+#     targetFiles: '**/*.yaml'
+#     keepToken: true
+#     tokenPrefix: __
+#     tokenSuffix: __
+
+
+# login to git repository and clone the repo from https://basketasia@dev.azure.com/basketasia/UltraTone/_git/ultratone-gitops in deployment branch
+# - script: |
+#     git config user.email "$(gitEmail)"
+#     git config user.name "$(gitUsername)" 
+#     git clone https://$(gitUsername):$(gitToken)@dev.azure.com/basketasia/UltraTone/_git/ultratone-gitops
+#     cd ultratone-gitops
+#     git checkout deployment
+#   displayName: 'Clone gitops repo'
+
+
+# copy the files from Deployments/helm-charts folder to gitops repo helm/helm/dev/Charts/dash-frontend folder
+# - script: |
+#     ls -lhta Deployments/helm-charts/
+#     ls -lhta ultratone-gitops/helm/helm/dev/Charts/dash-frontend/
+#     cp -r Deployments/helm-charts/values.yaml ultratone-gitops/helm/helm/dev/Charts/dash-frontend/values.yaml
+#   displayName: 'Copy files to gitops repo'
+
+
+# commit and push the changes to gitops repo
+# - script: |
+#     cd ultratone-gitops
+#     git checkout deployment
+#     git status
+#     git branch
+#     git add -A -- .
+#     git commit -m "update dash-frontend helm $(buildNumber) "
+#     git push 
+#   displayName: 'Commit and push changes to gitops repo'

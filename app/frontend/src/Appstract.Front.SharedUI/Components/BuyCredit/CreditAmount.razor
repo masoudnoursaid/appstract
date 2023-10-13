@@ -1,0 +1,71 @@
+﻿
+<LoadingWrapper IsLoaded="@_isLoaded" HasError="@_hasError" Error="@Error">
+    <ContentWrapper>
+        @if (_unknownError)
+        {
+            <UnknownError OnRetry="@OnInitializedAsync"/>
+        }
+        else
+        {
+            if (SelectedPaymentMethod is null)
+            {
+                <div Class="d-flex justify-center align-content-center flex-wrap list-empty">
+                    @((MarkupString)UltraToneIcons.LIST_IS_EMPTY)
+                    <MudText Class="typo__reg400--5 color-neutral--500 mt-6">
+                        @PaymentMethodResource.PleaseChoosePaymentMethod
+                    </MudText>
+                </div>
+            }
+            else
+            {
+                <div Class="payment-method">
+                    <MudText Class="typo__med500--5 color-neutral--500 mt-9 mb-4">
+                        @PaymentMethodResource.EnterCreditAmount
+                    </MudText>
+
+                    <div Class="d-flex flex-wrap gap-2 mb-8">
+                        @if (SelectedPaymentMethod.Amounts != null)
+                        {
+                            foreach (var creditAmount in SelectedPaymentMethod.Amounts)
+                            {
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Default"
+                                           DisableElevation="true"
+                                           Class="flex-auto d-flex payment-method__offered-amount"
+                                           @onclick="@(() => ChangeSelectedAmount(creditAmount))">
+                                    <MudText Align="Align.Center" Class="offered-amount__text color-neutral--600 typo__reg400--3 my-1">
+                                        @(((decimal)creditAmount).ToFormattedString(SelectedPaymentMethod.Currency, BaseInfo.UserCulture))
+                                    </MudText>
+                                </MudButton>
+                            }
+                        }
+                    </div>
+                    <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Class="payment-method__amount"
+                                  @bind-Value="@_paymentAmount" Placeholder="@_placeHolder" Adornment="Adornment.Start"
+                                  AdornmentText="@CountryUtil.GetCurrencySymbolByCurrencyCode(SelectedPaymentMethod.Currency)"
+                                  Immediate="true" Validation="@PaymentAmountValidation" @ref="PaymentAmountField"
+                                  HelperText="@PaymentAmountHelperText" Mask="PaymentAmountMask"/>
+                </div>
+                <MudItem xs="12" Class="mt-4">
+                    <AlertMessage
+                        Class="py-0"
+                        Show="@(Error.Code != default)"
+                        Type="Error.FormattedType"
+                        ErrorCode="@Error.FormattedCode"
+                        Message="@Error.Message"/>
+                </MudItem>
+                <div Class="payment-method mt-8 d-flex align-stretch flex-grow-1 gap-6">
+                    <MudButton Variant="Variant.Filled"
+                               FullWidth="true"
+                               DisableElevation="true"
+                               Class="ultratone-btn payment-method__submit-btn"
+                               Color="Color.Primary"
+                               OnClick="Pay"
+                               Disabled="@_isCheckoutBtnDisable">
+                        @PaymentMethodResource.Checkout
+                    </MudButton>
+                </div>
+            }
+        }
+    </ContentWrapper>
+</LoadingWrapper>

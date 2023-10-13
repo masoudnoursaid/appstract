@@ -1,0 +1,7 @@
+﻿steps:
+
+  - script: dotnet nuget list source
+    displayName: 'nuget list'
+
+  - script: dotnet nuget push **/*.nupkg -s appstract
+    displayName: 'nuget push'

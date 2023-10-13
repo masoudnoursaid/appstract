@@ -1,0 +1,37 @@
+parameters:
+  - name: connectionName
+    type: string
+  - name: imageName
+    type: string
+  - name: imageTag
+    type: string
+  - name: dockerFilePath
+    type: string
+    
+
+steps:
+
+- task: Docker@2
+  displayName: 'Docker Login'
+  inputs:
+    command: login
+    containerRegistry: ${{ parameters.connectionName }}
+
+- task: Docker@2
+  displayName: 'Docker Build'
+  inputs:
+    command: build
+    repository: ${{ parameters.imageName }}
+    dockerFile: ${{ parameters.dockerFilePath }}
+    buildContext: .
+    arguments: --build-arg GITLAB_NUGET_USERNAME=$(GITLAB_NUGET_USERNAME) --build-arg GITLAB_NUGET_PASSWORD=$(GITLAB_NUGET_PASSWORD)
+    tags: |
+      ${{ parameters.imageTag }}
+
+- task: Docker@2
+  displayName: 'Docker Push'
+  inputs:
+    command: 'push'
+    repository: ${{ parameters.imageName }}
+    tags: |
+      ${{ parameters.imageTag }}

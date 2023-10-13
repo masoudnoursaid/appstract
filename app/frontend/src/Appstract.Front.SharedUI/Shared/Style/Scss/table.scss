@@ -1,0 +1,101 @@
+﻿@import "../Base/variables";
+
+.ultratone-table {
+  box-shadow: none;
+  width: 100%;
+  background-color: $color-base--white;
+  border: 1px solid $color-neutral--200;
+  border-radius: 12px;
+
+  table {
+    border: 0;
+  }
+}
+
+.ultratone-table--selectable tbody tr {
+  cursor: pointer;
+}
+
+.ultratone-table thead th {
+  background-color: $color-neutral--50;
+  border-top: 1px solid $color-neutral--200;
+  border-bottom: 1px solid $color-neutral--200;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: $color-neutral--600;
+  text-align: left;
+}
+
+.ultratone-table thead th:first-child {
+  border-top-left-radius: 12px;
+  border-left: 1px solid $color-neutral--200;
+}
+
+.ultratone-table thead th:last-child {
+  border-top-right-radius: 12px;
+  border-right: 1px solid $color-neutral--200;
+}
+
+.ultratone-table tbody td {
+  border-top: 1px solid $color-neutral--200;
+  border-bottom: 1px solid $color-neutral--200;
+}
+
+.ultratone-table tbody td:first-child {
+  border-left: 1px solid $color-neutral--200;
+}
+
+.ultratone-table tbody td:last-child {
+  border-right: 1px solid $color-neutral--200;
+}
+
+.ultratone-table tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.ultratone-table tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+.ultratone-table tbody th {
+  border: 1px solid $color-neutral--200;
+}
+
+.ultratone-table tbody th:last-child {
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.ultratone-table tr:hover td {
+  background-color: $color-primary--25;
+}
+
+.ultratone-table .selected td {
+  background-color: $color-primary--25;
+}
+
+.ultratone-table__pagination {
+  border-top: 1px solid $color-neutral--200;
+}
+
+.ultratone-table__pagination li button {
+  border-radius: 4px !important;
+}
+
+.ultratone-table--empty {
+  margin-top: 100px;
+  border: none;
+  background-color: transparent;
+}
+
+.ultratone-table--empty thead {
+  display: none !important;
+}
+
+.ultratone-table--empty th {
+  border: none !important;
+  background-color: transparent;
+}

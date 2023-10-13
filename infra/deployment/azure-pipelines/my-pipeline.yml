@@ -1,0 +1,63 @@
+trigger:
+#Name of desired branches
+- develop
+
+pool:
+  name: Default
+
+variables:
+- name: sourceBranchName
+  value: $(Build.SourceBranchName)
+- name: registryAddress
+  value: my-registry.mydomain.com
+- name: imageName
+  value: grp-name/repo-name
+- name: dockerFilePath
+  value: 'src/Dockerfile'
+- name: connectionName
+  value: 'myServiceConnection'
+- name: dotnetVersion
+  value: '7.0.x'
+- name: chartPath
+  value: 'path/to/helm-charts/'
+- name: packageDest
+  value: 'path/to/save/helm-charts/'
+- name: chartTag
+  value: $(AssemblySemVer)
+- name: chartName
+  value: my-project-$(AssemblySemVer).tgz
+- name: gitlabChart
+  value: https://my-registry.mydomain.com/api/v4/projects/MY_PROJECT_ID/packages/helm/api/$(sourceBranchName)/charts
+- name: imageTag
+  value: $(AssemblySemVer)
+- name: nugetServiceConnectionName
+  value: 'myServiceConnectionName'
+- name: nugetPackageRegistryUrl
+  value: https://my-registry.mydomain.com/api/v4/projects/MY_PROJECT_ID/packages/nuget/index.json
+#Required for Mac
+- name: DOTNET_ROOT
+  value: /usr/local/share/dotnet/
+steps:
+
+# 1. checkout
+- checkout: self
+  fetchDepth: 0
+
+# 2. start ci processes
+- ${{ if eq(variables['Build.Reason'], 'IndividualCI') }}:
+  - template: ./templates/steps-ci-processes.yml
+    parameters:
+      imageName: $(imageName)
+      dockerFilePath: $(dockerFilePath)
+      connectionName: $(connectionName)  
+      dotnetVersion: $(dotnetVersion)
+      chartPath: $(chartPath)
+      packageDest: $(packageDest)
+      chartTag: $(chartTag)
+      chartName: $(chartName)
+      gitlabChart: $(gitlabChart)
+      imageTag: $(imageTag)
+      gitlabUser: $(gitlabUser)
+      gitlabPass: $(gitlabPass)
+      nugetServiceConnectionName: $(nugetServiceConnectionName)
+

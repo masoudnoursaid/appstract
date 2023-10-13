@@ -1,0 +1,34 @@
+﻿@if (Show)
+{
+    <MudAlert Class="@($"{_classType} rounded-12 my-2")"
+              Severity="@_severity"
+              NoIcon="true"
+              Dense="true"
+              CloseIconClicked="CloseAlert">
+        <MudGrid Spacing="0">
+            <MudItem xs="2" Class="d-flex align-center justify-center">
+                <MudIcon Icon="@_icon" Size="Size.Medium"/>
+            </MudItem>
+            <MudItem xs="10" Class="d-flex align-center justify-center">
+                <MudGrid Spacing="0" Class="ml-2">
+                    @if (!string.IsNullOrEmpty(Message))
+                    {
+                        <MudItem xs="12">
+                            <MudText Class="typo__med500--2 color-neutral--800 mb-1">
+                                @Message
+                            </MudText>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(ErrorCode))
+                    {
+                        <MudItem xs="12">
+                            <MudText Class="typo__reg400--1 color-neutral--800">
+                                @($"{AlertResource.ErrorCode}: {ErrorCode}")
+                            </MudText>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </MudAlert>
+}

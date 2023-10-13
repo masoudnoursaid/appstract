@@ -1,0 +1,77 @@
+﻿@using Appstract.Front.Application.Common.Resources
+@using MudBlazor
+@using Appstract.Front.Application.Common.Constants
+<div class="flex-none">
+    <MudButton Class=@((Dates is null ? "table-filter__btn" : "table-filter__btn--active") + $" {Class}")
+               DisableElevation="true"
+               OnClick="@(() => _isDateFilterOpen = !_isDateFilterOpen)">
+        <MudIcon Icon="@UltraToneIcons.DATE_RANGE" Class="table-filter__btn--icon mx-1"></MudIcon>
+        <MudText Class=@($"mr-1{(Dates is null ? " typo__reg400--2" : " typo__bold700--2")}")>
+            @(Dates is null ? Title : Title + ": ")
+        </MudText>
+        <MudText Class=@(Dates is null ? string.Empty : "typo__reg400--2 mr-1")>
+            @(Dates is null ? string.Empty : $"{(DateTime)Dates.Start!:dd-MMMM-yyyy}>{(DateTime)Dates.End!:dd-MMMM-yyyy}")
+        </MudText>
+        @if (Dates is not null)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="@Clear" Class="table-filter__small-close-clear-icon"/>
+        }
+        <MudIconButton Icon="@(_isDateFilterOpen ? UltraToneIcons.EXPAND_LESS : UltraToneIcons.EXPAND_MORE)"
+                       OnClick="@(() => _isDateFilterOpen = !_isDateFilterOpen)"
+                       Class="table-filter__small-close-clear-icon"/>
+    </MudButton>
+    <MudPopover Open="@_isDateFilterOpen"
+                AnchorOrigin="Origin.BottomLeft"
+                TransformOrigin="Origin.TopLeft"
+                Elevation="0"
+                Class="table-filter__popover px-3 pt-3">
+        <div>
+            <div>
+                <MudText Inline="true" Class="color-neutral--400 typo__reg400--2">@Title</MudText>
+                <MudText Inline="true" Class="color-neutral--500 typo__reg400--2 ml-1">@TableFiltersResource.IsBetween</MudText>
+            </div>
+            <div class="d-flex mt-3">
+                <MudTextField T="string" Variant="Variant.Outlined" Disabled="true" Margin="Margin.Dense" 
+                              Class="table-filter__date-range-picker--header-input pr-1"
+                              Text="@(_tempDates is null ? TableFiltersResource.From : _tempDates.Start!.Value.ToString("dd-MMM-yyyy"))"/>
+                <MudTextField T="string" Variant="Variant.Outlined" Disabled="true" Margin="Margin.Dense" 
+                              Class="table-filter__date-range-picker--header-input pl-1"
+                              Text="@(_tempDates is null ? TableFiltersResource.To : _tempDates.End!.Value.ToString("dd-MMM-yyyy"))"/>
+            </div>
+        </div>
+        <MudDateRangePicker
+            Class="table-filter__date-range-picker"
+            PickerVariant="PickerVariant.Static"
+            @bind-DateRange="@_tempDates"
+            DisableToolbar="true"
+            IsDateDisabledFunc="@(d => d.Date > DateTime.Now.Date)"
+            AutoClose="false"
+            DisplayMonths="1">
+        </MudDateRangePicker>
+        <div class="d-flex justify-space-between my-3">
+            <MudButton Class="mr-auto align-self-start rounded-12 table-filter__clear-btn"
+                       Disabled="@(_tempDates is null)"
+                       OnClick="@Clear">
+                @TableFiltersResource.Clear
+            </MudButton>
+            <div class="d-flex justify-end">
+                <MudButton Class="rounded-12 table-filter__cancel-btn mr-4" OnClick="@Cancel">
+                    @TableFiltersResource.Cancel
+                </MudButton>
+                <MudButton Class="rounded-12 table-filter__ok-btn"
+                           Color="Color.Primary"
+                           Variant="Variant.Filled"
+                           DisableElevation="true"
+                           Disabled="@(_tempDates is null)"
+                           OnClick="@Ok">
+                    @TableFiltersResource.OK
+                </MudButton>
+            </div>
+        </div>
+    </MudPopover>
+</div>
+
+@if (_isDateFilterOpen)
+{
+    <Overlay OnOverlayClick="@Cancel"/>
+}

@@ -1,0 +1,8 @@
+﻿@using Appstract.Front.Application.Common.Resources
+<div class="not-found-page__main">
+    <MudText Class="d-flex justify-center typo__reg400--14 color-neutral--400 mb-6">404</MudText>
+    <MudText Align="Align.Center" Class="d-flex justify-center typo__reg400--11">@NotFoundPageResource.Message</MudText>
+    <MudButton Class="mt-12 not-found-page__return--btn" OnClick="ReturnHome" DisableElevation="true">
+        <MudText Class="color-base--white">@NotFoundPageResource.ReturnButton</MudText>
+    </MudButton>
+</div>

@@ -1,0 +1,88 @@
+﻿@using Appstract.Front.Application.Common.Resources
+@using MudBlazor
+@using Appstract.Front.Application.Common.Constants
+@using Appstract.Front.Application.Common.Extensions
+@typeparam TEnum
+
+<div class="flex-none">
+    <MudButton Class=@((SelectedValues.Count > 0 ? "table-filter__btn--active" : "table-filter__btn") + $" {Class}")
+               DisableElevation="true"
+               OnClick="@(() => _isFilterOpen = !_isFilterOpen)">
+        <MudIcon Icon="@UltraToneIcons.SLOW_MOTION_VIDEO" Class="table-filter__btn--icon mx-1"></MudIcon>
+        <MudText Class=@($"mr-1{(SelectedValues.Count > 0 ? " typo__bold700--2" : " typo__reg400--2")}")>
+            @(SelectedValues.Count > 0 ? Title + ": " : Title)
+        </MudText>
+        <MudText Class=@(SelectedValues.Count > 0 ? "typo__reg400--2 mr-1" : string.Empty)>
+            @(SelectedValues.Count > 0 ? 
+                string.Join(",", SelectedValues.Select(t => t.ToDescriptionString())).MakeShortFromBegin(25) : 
+                string.Empty)
+        </MudText>
+        @if (SelectedValues.Count > 0)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="@Clear" Class="table-filter__small-close-clear-icon"/>
+        }
+        <MudIconButton Icon="@(_isFilterOpen ? UltraToneIcons.EXPAND_LESS : UltraToneIcons.EXPAND_MORE)"
+                       OnClick="@(() => _isFilterOpen = !_isFilterOpen)"
+                       Class="table-filter__small-close-clear-icon"/>
+    </MudButton>
+    <MudPopover Open="@_isFilterOpen"
+                AnchorOrigin="Origin.BottomLeft"
+                TransformOrigin="Origin.TopLeft"
+                Elevation="0"
+                Class="table-filter__popover pa-3">
+        <MudGrid Class="d-flex flex-column" Spacing="0">
+            <MudItem>
+                <MudText Inline="true" Class="table-filter__popover-title mr-1">@Title</MudText>
+                @if (_availableValues.Count > 2 && MultipleSelect)
+                {
+                    <MudMenu Label="@(_condition ? TableFiltersResource.Is : TableFiltersResource.IsNot)" Class="table-filter__condition"
+                             ListClass="table-filter__condition--list" PopoverClass="table-filter__condition--popover" Dense="true"
+                             AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft" EndIcon="@UltraToneIcons.EXPAND_MORE">
+                        <MudMenuItem OnClick="@(_ => _condition = true)">@TableFiltersResource.Is</MudMenuItem>
+                        <MudMenuItem OnClick="@(_ => _condition = false)">@TableFiltersResource.IsNot</MudMenuItem>
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudText Inline="true" Class="table-filter__popover-title">@TableFiltersResource.Is</MudText>
+                }
+            </MudItem>
+            <MudItem Class="mt-4 mb-2 table-filter__popover-items">
+                @foreach (var item in _availableValues)
+                {
+                    <MudCheckBox T="bool" Size="Size.Small" Color="Color.Primary" UnCheckedColor="Color.Default"
+                                 Class="table-filter__popover-item"
+                                 CheckedChanged="@(e => OnCheckedChanged(e, item))"
+                                 Checked="@_tempSelectedValues.Contains(item)"
+                                 Label="@item.ToDescriptionString()"/>
+                }
+            </MudItem>
+            <MudItem Class="ml-2">
+                <div class="d-flex justify-space-between">
+                    <MudButton Class="align-self-start table-filter__clear-btn"
+                               Disabled="@(!_tempSelectedValues.Any())"
+                               OnClick="@Clear">
+                        @TableFiltersResource.Clear
+                    </MudButton>
+                    <div class="d-flex justify-end">
+                        <MudButton Class="align-self-end table-filter__cancel-btn rounded-12 mr-4" 
+                                   OnClick="@Cancel">@TableFiltersResource.Cancel</MudButton>
+                        <MudButton Class="align-self-end table-filter__ok-btn rounded-12"
+                                   Color="Color.Primary"
+                                   Variant="Variant.Filled"
+                                   DisableElevation="true"
+                                   Disabled="@(!_tempSelectedValues.Any())"
+                                   OnClick="@Ok">
+                            @TableFiltersResource.OK
+                        </MudButton>
+                    </div>
+                </div>
+            </MudItem>
+        </MudGrid>
+    </MudPopover>
+</div>
+
+@if (_isFilterOpen)
+{
+    <Overlay OnOverlayClick="@Cancel"/>
+}

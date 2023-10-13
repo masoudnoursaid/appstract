@@ -1,0 +1,41 @@
+﻿parameters:
+  - name: certPfxPath
+    type: string
+  - name: certPfxPass
+    type: string
+
+steps:
+  - script: |
+      dotnet dev-certs https --clean
+    displayName: 'https clean'
+
+  - script: |
+      dotnet dev-certs https -ep ${{ parameters.certPfxPath }} -p ${{ parameters.certPfxPass }}
+    displayName: 'generate certificate'
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: .
+      Contents: '*.pfx'
+      TargetFolder: 'api/src/Service//Admin.Api/'
+      retryCount: '3'
+      delayBetweenRetries: '500'
+    displayName: "cert admin cp"
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: .
+      Contents: '*.pfx'
+      TargetFolder: 'api/src/Service//Payment.Api/'
+      retryCount: '3'
+      delayBetweenRetries: '500'
+    displayName: "cert payment cp"
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: .
+      Contents: '*.pfx'
+      TargetFolder: 'api/api/src/Service///Global.Api/'
+      retryCount: '3'
+      delayBetweenRetries: '500'
+    displayName: "cert global cp"

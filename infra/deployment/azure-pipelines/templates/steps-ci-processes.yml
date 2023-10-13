@@ -1,0 +1,64 @@
+parameters:
+- name: imageName
+  type: string
+- name: dockerFilePath
+  type: string
+- name: connectionName
+  type: string
+- name: dotnetVersion
+  type: string
+- name: chartPath
+  type: string
+- name: packageDest
+  type: string
+- name: chartTag
+  type: string
+- name: chartName
+  type: string
+- name: gitlabChart
+  type: string
+- name: imageTag
+  type: string
+- name: gitlabUser
+  type: string
+- name: gitlabPass
+  type: string
+- name: nugetServiceConnectionName
+  type: string
+
+steps:
+
+# 1. install git version
+- template: ./steps-install-git-version.yml
+
+# 2. replace values
+- template: ./steps-replace-values.yml
+  parameters:
+    destination: ${{ parameters.chartPath }}
+
+# 3. build and test dotnet
+- template: ./steps-build-and-run-tests.yml
+  parameters:
+    dotnetVersion: ${{ parameters.dotnetVersion }}
+    nugetServiceConnectionName: ${{ parameters.nugetServiceConnectionName }}
+
+# 4. generate livingdoc
+- template: ./steps-generate-livingdoc.yml
+  
+# 5. docker build and push 
+- template: ./steps-build-and-push-docker.yml
+  parameters:
+    connectionName: ${{ parameters.connectionName }}
+    imageName: ${{ parameters.imageName }}
+    imageTag: ${{ parameters.imageTag }}
+    dockerFilePath: ${{ parameters.dockerFilePath }}
+
+# 6. pack and publish helm chart
+- template: ./steps-install-and-pack.yml
+  parameters:
+    chartPath: ${{ parameters.chartPath }}
+    destination: ${{ parameters.packageDest }}
+    chartName: ${{ parameters.chartName }}
+    gitlabUser: ${{ parameters.gitlabUser }}
+    gitlabPass: ${{ parameters.gitlabPass }}
+    gitlabChart: ${{ parameters.gitlabChart }}

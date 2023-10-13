@@ -1,0 +1,38 @@
+// Name or ip of vcenter
+vsphere_server = "..."
+
+// User on the vSphere server.
+vsphere_user = "..."
+
+// Password of the user on the vSphere server.
+vsphere_password = "..."
+
+// port group name to which cluster nodes will connect
+network1 = "OKD-2002-private"
+
+// port group name to which cluster nodes will connect
+network2 = "OKD-2001-public"
+
+cluster_name= "os-rg1"
+
+//name of fedora coreOS template in vcenter
+template="Fedora-coreos"
+
+// name of datastore, esxi host, mac address and ignition url of bootstrap node
+bootstrap_datastore= "..."
+bootstrap_esxi= "..."
+bootstrap_mac= "00:50:56:b3:52:cb"
+bootstrap_ignition_url= "http://.../bootstrap.ign"
+
+// name of datastore, esxi host, mac address and ignition url of master nodes
+master_datastores= ["...", "...", "..."]
+master_macs = ["00:50:56:b3:38:bd", "00:50:56:b3:c1:ac", "00:50:56:b3:d0:38" ]
+master_esxis= ["...","...", "..."]
+master_ignition_url="http://.../master.ign"
+
+// name of datastore, esxi host, mac address and ignition url of worker nodes
+worker_datastores= ["...", "..." ]
+worker_macs1 = ["00:50:56:b3:0d:63", "00:50:29:3d:78:a7"  ]
+worker_macs2 = ["00:50:56:b3:0d:63", "00:50:29:3d:78:a7"  ]
+worker_esxis= ["...", "..."]
+worker_ignition_url= "http://.../worker.ign"

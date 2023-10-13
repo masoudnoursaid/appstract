@@ -1,0 +1,6 @@
+@using Appstract.Front.Application.Common.Constants
+<MudPaper Elevation="0" Class="@($"{Class} page-wrapper pa-6")">
+    @((MarkupString)UltraToneIcons.ULTRA_TONE_LOGO)
+    <MainTitle Title="@Title" Class="mt-8 title title--bold"/>
+    @ChildContent
+</MudPaper>

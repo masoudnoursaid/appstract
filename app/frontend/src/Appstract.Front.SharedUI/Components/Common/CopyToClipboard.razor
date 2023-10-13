@@ -1,0 +1,7 @@
+﻿@using Appstract.Front.Application.Common.Constants
+@if (!string.IsNullOrWhiteSpace(Text))
+{
+    <MudButton OnClick="Copy" Class="text-wrapper__copy-btn pa-0">
+        <MudIcon Icon="@UltraToneIcons.CONTENT_COPY" Size="Size.Small"></MudIcon>
+    </MudButton>
+}

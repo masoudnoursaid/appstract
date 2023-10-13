@@ -1,0 +1,25 @@
+$TTL 1W
+@	IN	SOA	okd-services.os-rg1.maxtld.dev.	root (
+			2020092301	; serial
+			3H		    ; refresh (3 hours)
+			30M		    ; retry (30 minutes)
+			2W		    ; expiry (2 weeks)
+			1W )		; minimum (1 week)
+	IN	NS	okd-services.os-rg1.maxtld.dev.
+;
+; syntax is "last octet" and the host must have fqdn with trailing dot
+
+2   IN  PTR okd-services.os-rg1.maxtld.dev.
+
+10	IN	PTR	okd-master1.os-rg1.maxtld.dev.
+11	IN	PTR	okd-master2.os-rg1.maxtld.dev.
+12	IN	PTR	okd-master3.os-rg1.maxtld.dev.
+;
+4	IN	PTR	okd-bootstrap.os-rg1.maxtld.dev.
+;
+2	IN	PTR	api.os-rg1.maxtld.dev.
+2	IN	PTR	api-int.os-rg1.maxtld.dev.
+;
+21	IN	PTR	okd-worker1.os-rg1.maxtld.dev.
+22	IN	PTR	okd-worker2.os-rg1.maxtld.dev.
+;

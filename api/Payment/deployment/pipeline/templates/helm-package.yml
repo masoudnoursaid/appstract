@@ -1,0 +1,36 @@
+﻿parameters:
+  - name: chartPath
+    type: string
+  - name: destination
+    type: string
+  - name: chartName
+    type: string
+  - name: gitlabUser
+    type: string
+  - name: gitlabPass
+    type: string
+  - name: gitlabChartUrl
+    type: string
+
+
+steps:
+  - task: HelmInstaller@1
+    displayName: Helm installer
+    inputs:
+      helmVersionToInstall: latest
+  
+  - task: HelmDeploy@0
+    displayName: 'Helm package'
+    inputs:
+      command: package
+      chartPath: '${{ parameters.chartPath }}'
+      destination: '${{ parameters.destination }}'
+      save: false
+  
+  - task: Bash@3
+    displayName: Publish to Gitlab
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd ${{ parameters.destination }}
+        curl --request POST --form 'chart=@${{ parameters.chartName }}-0.1.0.tgz' --user ${{ parameters.gitlabUser }}:${{ parameters.gitlabPass }} ${{ parameters.gitlabChartUrl }}

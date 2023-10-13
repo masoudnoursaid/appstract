@@ -1,0 +1,98 @@
+@using Appstract.Front.Application.Common.Utilities;
+@using Microsoft.AspNetCore.Components
+@using MudBlazor
+@using Appstract.Front.Domain.Enums
+@using Appstract.Front.Application.Common.Resources
+@using Appstract.Front.Application.Common.Constants
+@using Appstract.Front.Application.Common.Extensions
+
+<div class="flex-none">
+    <MudButton Class=@((string.IsNullOrWhiteSpace(PhoneNumber) ? "table-filter__btn" : "table-filter__btn--active") + $" {Class}")
+               DisableElevation="true"
+               OnClick="@(() => _isPhoneFilterOpen = !_isPhoneFilterOpen)">
+        <MudIcon Icon="@UltraToneIcons.CALL" Class="table-filter__btn--icon mx-1"></MudIcon>
+        <MudText Class=@($"mr-1{(string.IsNullOrWhiteSpace(PhoneNumber) ? " typo__reg400--2" : " typo__bold700--2")}")>
+            @(string.IsNullOrWhiteSpace(PhoneNumber) ? Title : Title + ": ")
+        </MudText>
+        <MudText Class=@(string.IsNullOrWhiteSpace(PhoneNumber) ? string.Empty : "typo__reg400--2 mr-1")>
+            @(string.IsNullOrWhiteSpace(PhoneNumber) ? string.Empty : PhoneNumber)
+        </MudText>
+        @if (!string.IsNullOrWhiteSpace(PhoneNumber))
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="@Clear" Class="table-filter__small-close-clear-icon"/>
+        }
+        <MudIconButton Icon="@(_isPhoneFilterOpen ? UltraToneIcons.EXPAND_LESS : UltraToneIcons.EXPAND_MORE)"
+                       OnClick="@(() => _isPhoneFilterOpen = !_isPhoneFilterOpen)"
+                       Class="table-filter__small-close-clear-icon"/>
+    </MudButton>
+    <MudPopover Open="@_isPhoneFilterOpen"
+                AnchorOrigin="Origin.BottomLeft"
+                TransformOrigin="Origin.TopLeft"
+                Elevation="0"
+                Class="table-filter__popover px-3">
+        <MudGrid Class="d-flex flex-column" Spacing="0">
+            <MudItem Class="d-flex align-baseline pa-1">
+                <MudText Class="table-filter__popover-title mr-2">@Title</MudText>
+                <MudSelect Margin="Margin.Dense"
+                           T="FilterMatchType"
+                           @bind-Value="@PhoneNumberQueryType"
+                           AnchorOrigin="Origin.BottomCenter"
+                           Dense="true"
+                           DisableUnderLine="true"
+                           Class="table-filter__query-type">
+                    @foreach (FilterMatchType item in Enum.GetValues(typeof(FilterMatchType)))
+                    {
+                        <MudSelectItem Value="@item"
+                                       Class="table-filter__query-item">
+                            @item.ToDescriptionString()
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem Class="d-flex align-baseline pb-4">
+                @if (PhoneNumberQueryType == FilterMatchType.Exact)
+                {
+                    <PhoneInput Name="table-filter__phone-number"
+                                AllCountries="CountryUtil.GetAll()"
+                                PhoneNumberChangedEvent="@(p => _tempPhoneNumber = p.NormalizePhoneNumber())"/>
+                }
+                else
+                {
+                    <MudTextField
+                        @bind-Value="_tempPhoneNumber"
+                        Variant="Variant.Outlined"
+                        Margin="Margin.Dense"
+                        Class="rounded-12"
+                        Immediate="true"
+                        UserAttributes="@(new Dictionary<string, object> { { "name", "table-filter__phone-number" } })"/>
+                }
+            </MudItem>
+            <MudItem Class="ml-2 mb-3">
+                <div class="d-flex justify-space-between">
+                    <MudButton Class="align-self-start table-filter__clear-btn"
+                               Disabled="@(string.IsNullOrWhiteSpace(_tempPhoneNumber))"
+                               OnClick="@Clear">
+                        @TableFiltersResource.Clear
+                    </MudButton>
+                    <div class="d-flex justify-end">
+                        <MudButton Class="align-self-end table-filter__cancel-btn rounded-12 mr-4" 
+                                   OnClick="@Cancel">@TableFiltersResource.Cancel</MudButton>
+                        <MudButton Class="align-self-end table-filter__ok-btn rounded-12"
+                                   Color="Color.Primary"
+                                   Variant="Variant.Filled"
+                                   DisableElevation="true"
+                                   Disabled="@(string.IsNullOrWhiteSpace(_tempPhoneNumber))"
+                                   OnClick="@Ok">
+                            @TableFiltersResource.OK
+                        </MudButton>
+                    </div>
+                </div>
+            </MudItem>
+        </MudGrid>
+    </MudPopover>
+</div>
+
+@if (_isPhoneFilterOpen)
+{
+    <Overlay OnOverlayClick="@Cancel"/>
+}

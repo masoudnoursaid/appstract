@@ -1,0 +1,14 @@
+﻿@import "../Base/variables";
+
+.success{
+    border: 1px solid $color-successful--600;
+}
+.info{
+    border: 1px solid $color-primary--600;
+}
+.warning{
+     border: 1px solid $color-warning--600;
+}
+.error{
+    border: 1px solid $color-error--600;
+}

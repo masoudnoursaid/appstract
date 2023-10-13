@@ -1,0 +1,17 @@
+﻿@attribute [Route(ROUTE)]
+
+<DashboardWrapper>
+    <Body>
+    <div class="d-flex">
+        <FinancialMenu/>
+        <div class="dash-content">
+            <div class="app__content--inner my-8 topup-voucher">
+                <span>
+                    <TopupVoucherList GetExecutedVoucherList="@GetExecutedVouchersAsync"
+                                      SubmitVoucher="@SubmitTopupVoucherAsync"/>
+                </span>
+            </div>
+        </div>
+    </div>
+    </Body>
+</DashboardWrapper>

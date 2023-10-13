@@ -1,0 +1,32 @@
+trigger:
+- development
+- prod_test
+- prod
+
+pool:
+  name: Default
+  vmImage: 'ubuntu-latest'
+
+variables:
+- name: sourceBranchName
+  value: $(Build.SourceBranchName)
+
+steps:
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: '>= 3.1'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd android/
+        bundle install --retry=3 --jobs=4
+    displayName: 'Install fastlane dependencies'
+  
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        bundle exec fastlane deploy flavor:$(sourceBranchName)
+    displayName: 'Deploy on Google play'

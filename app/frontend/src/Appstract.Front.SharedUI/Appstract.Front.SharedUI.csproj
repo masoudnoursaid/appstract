@@ -1,0 +1,126 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnableDefaultSassItems>false</EnableDefaultSassItems>
+        <Title>Appstract.Front.SharedUI</Title>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <RootNamespace>Appstract.Front.SharedUI</RootNamespace>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Connections" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.10" />
+        <PackageReference Include="MudBlazor" Version="6.3.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Appstract.Front.Domain\Appstract.Front.Domain.csproj" />
+      <ProjectReference Include="..\Appstract.Front.Infrastructure\Appstract.Front.Infrastructure.csproj" />
+      <ProjectReference Include="..\Appstract.Front.InfrastructureMock\Appstract.Front.InfrastructureMock.csproj" />
+      <ProjectReference Include="..\Appstract.Mobile.Application\Appstract.Mobile.Application.csproj" />
+      <ProjectReference Include="..\Appstract.Mobile.Entities\Appstract.Mobile.Entities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\css" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Shared\Style\app.css" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Components\BuyCredit\CreditAmount.razor" />
+      <UpToDateCheckInput Remove="Components\BuyCredit\PaymentMethodList.razor" />
+      <UpToDateCheckInput Remove="Components\CallHistory\CallHistoryDidColumnHeader.razor" />
+      <UpToDateCheckInput Remove="Components\CallHistory\CallHistoryList.razor" />
+      <UpToDateCheckInput Remove="Components\CloudSimCard\CloudSimCardCountryCarrier.razor" />
+      <UpToDateCheckInput Remove="Components\CloudSimCard\CloudSimCardMobileNumbers.razor" />
+      <UpToDateCheckInput Remove="Components\CloudSimCard\CloudSimCardPayment.razor" />
+      <UpToDateCheckInput Remove="Components\CloudSimCard\CloudSimCardPriceInfo.razor" />
+      <UpToDateCheckInput Remove="Components\CloudSimCard\CloudSimCardPriceInfoDetail.razor" />
+      <UpToDateCheckInput Remove="Components\CloudSimCard\CloudSimCardPurchase.razor" />
+      <UpToDateCheckInput Remove="Components\CloudSimCard\CloudSimCardPurchasePhoneInput.razor" />
+      <UpToDateCheckInput Remove="Components\Dashboard\Dashboard.razor" />
+      <UpToDateCheckInput Remove="Components\Dashboard\DidList.razor" />
+      <UpToDateCheckInput Remove="Components\Dashboard\DirectNumberStatus.razor" />
+      <UpToDateCheckInput Remove="Components\Dashboard\SipClient.razor" />
+      <UpToDateCheckInput Remove="Components\Dashboard\UserCredit.razor" />
+      <UpToDateCheckInput Remove="Components\ProfileSetting\ProfileInfo.razor" />
+      <UpToDateCheckInput Remove="Components\Sms\Sms.razor" />
+      <UpToDateCheckInput Remove="Components\Sms\SmsConversation.razor" />
+      <UpToDateCheckInput Remove="Components\Sms\SmsHeader.razor" />
+      <UpToDateCheckInput Remove="Components\Sms\SmsInbox.razor" />
+      <UpToDateCheckInput Remove="Components\Sms\SmsSkeleton.razor" />
+      <UpToDateCheckInput Remove="Pages\Dashboard\DashboardPage.razor" />
+      <UpToDateCheckInput Remove="Pages\Dashboard\PersonalSetting.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Components\Dialogs\ShareViaDialog.razor.cs" />
+      <Compile Update="Components\BuyCredit\PaymentMethodList.cs">
+        <DependentUpon>PaymentMethodList.razor</DependentUpon>
+      </Compile>
+      <Compile Update="Components\BuyCredit\CreditAmount.cs">
+        <DependentUpon>CreditAmount.razor</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Financial\PurchaseHistory.cs">
+        <DependentUpon>PurchaseHistory.razor</DependentUpon>
+      </Compile>
+      <Compile Update="Components\PurchaseHistory\PurchaseHistoryList.cs">
+        <DependentUpon>PurchaseHistoryList.razor</DependentUpon>
+      </Compile>
+      <Compile Update="Components\PurchaseHistory\PurchaseHistoryDetailsDialog.cs">
+        <DependentUpon>PurchaseHistoryDetailsDialog.razor</DependentUpon>
+      </Compile>
+      <Compile Update="Components\Dialogs\ShareViaDialog.cs">
+        <DependentUpon>ShareViaDialog.razor</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Financial\TopupVoucher.cs">
+        <DependentUpon>TopupVoucher.razor</DependentUpon>
+      </Compile>
+      <Compile Update="Components\TopupVoucher\TopupVoucherList.cs">
+        <DependentUpon>TopupVoucherList.razor</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <Target Name="InstallNPMDependencies" BeforeTargets="Compile" Condition=" '$(Configuration)' != 'Release' And !Exists('..\..\node_modules') ">
+        <Message Importance="high" Text="Checking node version." />
+        <!-- Ensure Node.js is installed -->
+        <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project." />
+        <!-- Install npm resources -->
+        <Message Importance="high" Text="Performing first-run Webpack build..." />
+        <Exec Command="npm install" />
+    </Target>
+    
+
+    <PropertyGroup>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    </PropertyGroup>
+
+    <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
+        <ItemGroup>
+        <!-- Filter out unnecessary files -->
+        <_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')-&gt;WithMetadataValue('PrivateAssets', 'All'))" />
+        </ItemGroup>
+
+        <!-- Print batches for debug purposes -->
+        <Message Text="Batch for .nupkg: ReferenceCopyLocalPaths = @(_ReferenceCopyLocalPaths), ReferenceCopyLocalPaths.DestinationSubDirectory = %(_ReferenceCopyLocalPaths.DestinationSubDirectory) Filename = %(_ReferenceCopyLocalPaths.Filename) Extension = %(_ReferenceCopyLocalPaths.Extension)" Importance="High" Condition="'@(_ReferenceCopyLocalPaths)' != ''" />
+
+        <ItemGroup>
+        <!-- Add file to package with consideration of sub folder. If empty, the root folder is chosen. -->
+        <BuildOutputInPackage Include="@(_ReferenceCopyLocalPaths)" TargetPath="%(_ReferenceCopyLocalPaths.DestinationSubDirectory)" />
+        </ItemGroup>
+    </Target>
+</Project>

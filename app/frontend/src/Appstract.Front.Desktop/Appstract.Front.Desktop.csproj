@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <DisplayName>Appstract DEV</DisplayName>
+        <PublisherName>C826B645-A7ED-43F2-934C-9EB6162A4C68</PublisherName>
+        <PublisherDisplayName>BasketAsia Sdn. Bhd.</PublisherDisplayName>
+        <Logo>Resources\AppIcon\appicon.svg</Logo>
+        <TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net7.0-maccatalyst</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+        <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+        <!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+        <OutputType>Exe</OutputType>
+        <RootNamespace>Appstract.Desktop</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnableDefaultCssItems>false</EnableDefaultCssItems>
+        <PackageCertificateKeyFile>
+            Appstract.Desktop_TemporaryKey.pfx
+        </PackageCertificateKeyFile>
+        <!-- Display name -->
+        <ApplicationTitle>Appstract.Desktop</ApplicationTitle>
+
+        <!-- App Identifier -->
+        <ApplicationId>com.companyname.Appstract.desktop</ApplicationId>
+        <ApplicationIdGuid>6B55542B-4358-468A-ABC9-F5325AD2EAFB</ApplicationIdGuid>
+
+        <!-- Versions -->
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>1</ApplicationVersion>
+
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+        <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+        <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+        <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+        <GenerateTestArtifacts>False</GenerateTestArtifacts>
+        <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+        <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+        <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+        <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- App Icon -->
+
+        <!-- Splash Screen -->
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+        <!-- Images -->
+        <MauiImage Include="Resources\Images\*" />
+        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+
+        <!-- Custom Fonts -->
+        <MauiFont Include="Resources\Fonts\*" />
+
+        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\AppIcon\appicon.svg" />
+      <None Remove="Resources\AppIcon\appiconfg.svg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiIcon Include="Resources\AppIcon\appicon.svg" />
+      <MauiIcon Include="Resources\AppIcon\appiconfg.svg" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\Appstract.Front.SharedUI\Appstract.Front.SharedUI.csproj" />
+    </ItemGroup>
+
+</Project>

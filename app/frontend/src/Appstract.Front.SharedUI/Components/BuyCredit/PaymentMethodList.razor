@@ -1,0 +1,99 @@
+﻿
+<LoadingWrapper IsLoaded="@_isLoaded" HasError="@_hasError" Error="@Error">
+    <ContentWrapper>
+        @if (_unknownError)
+        {
+            <UnknownError OnRetry="@OnInitializedAsync"/>
+        }
+        else
+        {
+            <div class="buy-credit payment-method__content">
+
+                <AlertMessage Show="@PaymentMethodItems.Any(x => x.Enabled == false)"
+                              Class="mb-4"
+                              Type="AlertType.Warning"
+                              Message="@PaymentMethodResource.SanctionedCountryError">
+                </AlertMessage>
+
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var paymentMethod in PaymentMethodItems.Where(x => x.Enabled))
+                    {
+                        <MudField Variant="Variant.Text"
+                                  Margin="Margin.Dense"
+                                  FullWidth="true"
+                                  DisableUnderLine="true"
+                                  Class="@($"payment-method {GetPaymentMethodClass(paymentMethod)} px-3  payment-method__item--enable")"
+                                  @onclick="@(() => ChangeSelectedMethod(paymentMethod))">
+                            <div class="mb-1 d-flex justify-space-between content mt-n2">
+                                <div class="d-flex align-center pt-1 gap-1">
+                                    @if (!string.IsNullOrEmpty(paymentMethod.CountryIcon))
+                                    {
+                                        <MudImage Src="@($"{HttpClientService.GetBaseAddress()}{Configuration["ImagesPath"]}/{paymentMethod.CountryIcon}")"/>
+                                    }
+                                    <MudText Class="ml-1 payment-method__display-title typo__reg400--3 color-neutral--900">
+                                        @paymentMethod.DisplayTitle
+                                    </MudText>
+                                    <MudText Class="typo__reg400--3 color-neutral--300">
+                                        (@paymentMethod.Country)
+                                    </MudText>
+                                </div>
+                                <div class="d-flex justify-end gap-1">
+                                    @if (paymentMethod.Icon != null)
+                                    {
+                                        foreach (var item in paymentMethod.Icon)
+                                        {
+                                            <div class="payment-method__img d-flex align-center justify-center">
+                                                <MudImage Src="@($"{HttpClientService.GetBaseAddress()}{Configuration["ImagesPath"]}/{item}")"/>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <MudText Class="d-flex justify-end typo__reg400--0 color-neutral--200 mb-n1">
+                                @(PaymentMethodResource.PoweredBy + paymentMethod.Provider)
+                            </MudText>
+                        </MudField>
+                    }
+                    @foreach (var paymentMethod in PaymentMethodItems.Where(x => x.Enabled == false))
+                    {
+                        <MudField Variant="Variant.Text"
+                                  Margin="Margin.Dense"
+                                  FullWidth="true"
+                                  DisableUnderLine="true"
+                                  Class="px-3 payment-method payment-method__item payment-method__item--disable">
+                            <div class="mb-1 d-flex justify-space-between content mt-n2">
+                                <div class="d-flex align-center pt-1 gap-1">
+                                    @if (!string.IsNullOrEmpty(paymentMethod.CountryIcon))
+                                    {
+                                        <MudImage Src="@($"{HttpClientService.GetBaseAddress()}{Configuration["ImagesPath"]}/{paymentMethod.CountryIcon}")"/>
+                                    }
+                                    <MudText Class="mr-1 payment-method__display-title typo__reg400--3 color-neutral--900">
+                                        @paymentMethod.DisplayTitle
+                                    </MudText>
+                                    <MudText Class="typo__reg400--3 color-neutral--300">
+                                        (@paymentMethod.Country)
+                                    </MudText>
+                                </div>
+                                <div class="d-flex justify-end gap-1">
+                                    @if (paymentMethod.Icon != null)
+                                    {
+                                        foreach (var item in paymentMethod.Icon)
+                                        {
+                                            <div class="payment-method__img d-flex align-center justify-center">
+                                                <MudImage Src="@($"{HttpClientService.GetBaseAddress()}{Configuration["ImagesPath"]}/{item}")"/>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                            <MudText Class="d-flex justify-end typo__reg400--0 color-neutral--200 mb-n1">
+                                @(PaymentMethodResource.PoweredBy + paymentMethod.Provider)
+                            </MudText>
+                        </MudField>
+                    }
+                </div>
+            </div>
+        }
+    </ContentWrapper>
+</LoadingWrapper>

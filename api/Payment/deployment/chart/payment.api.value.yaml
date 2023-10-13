@@ -1,0 +1,58 @@
+name: "payment-api"
+
+deployment:
+  replicas: 1
+  container:
+    pullSecrets:
+      name: regcred
+    name: payment-api
+    image: 
+      name: external-url.gitlab-registry.maxtld.com/appstract/appstract-sdk/payment.api
+      tag: latest
+    port: 80
+    env:
+      # mssql environment
+      - name: DB_APP_HOST
+        valueFrom:
+          configMapKeyRef:
+            name: mysql-config
+            key: url
+      - name: DB_APP_PORT
+        value: ''
+      - name: DB_APP_USER
+        valueFrom:
+          secretKeyRef:
+            name: mysql-secret
+            key: username
+      - name: DB_APP_PASS
+        valueFrom:
+          secretKeyRef:
+            name: mysql-secret
+            key: password
+      - name: DB_APP_NAME
+        value: 'payment'
+        
+      # init mssql db tables
+      - name: DB_INIT
+        value: 'true'
+  
+      # certificate env
+      - name: CERT_PFX_PATH
+        value: 'cert.pfx'
+      - name: CERT_PFX_PASS
+        valueFrom:
+          secretKeyRef:
+            name: cert-secret
+            key: password
+      # sentry env
+      - name: SENTRY_DSN
+        value: https://b445d1283e1d6c29998f671527a8d1a2@sentry.maxtld.com//5
+        
+service:
+  port: 8080
+  targetPort: 80
+  nodePort: 30003
+  
+ingress:
+  host: payment.api.appstract.azihub.com
+  port: 443

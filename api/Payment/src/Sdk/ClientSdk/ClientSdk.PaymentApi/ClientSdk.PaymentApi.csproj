@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Payment.Sdk</RootNamespace>
+        <AssemblyName>Payment.Sdk</AssemblyName>
+        <BaseOutputPath>..\..\nuget</BaseOutputPath>
+        <GenerateDocumentationFile>False</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <PackageId>payment.hub.sdk</PackageId>
+        <Title>Payment Sdk</Title>
+        <Authors>Mason Chase</Authors>
+        <Description>Payment Sdk</Description>
+        <PackageTags>Payment Api Backend Sdk</PackageTags>
+        <Version>1.0.0</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ClientSdk.Common\ClientSdk.Common.csproj"/>
+    </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  CloseWhenBackgroundIsClicked="True"
+                  x:Name="AlertDialogPopup"
+                  BackgroundInputTransparent="False"
+                  BackgroundColor="#80000000"
+                  x:Class="Appstract.Front.Mobile.Common.Modals.AlertDialog">
+    <mopups:PopupPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" x:Key="HeaderStyle">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{Binding PrimaryColor}" />
+            </Style>
+            <Style TargetType="Label" x:Key="DescriptionStyle">
+                <Setter Property="FontAttributes" Value="None" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="#667085" />
+            </Style>
+            <Style TargetType="Button" x:Key="CancelButtonStyle">
+                <Setter Property="BackgroundColor" Value='White' />
+                <Setter Property="TextColor" Value="#344054" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="BorderColor" Value="#D0D5DD" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="Padding" Value="0,16" />
+            </Style>
+            <Style TargetType="Button" x:Key="ActionButtonStyle">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="Padding" Value="0,16" />
+                <Setter Property="BackgroundColor" Value="{Binding PrimaryColor}" />
+            </Style>
+        </ResourceDictionary>
+    </mopups:PopupPage.Resources>
+    <Frame CornerRadius="12" Padding="12" Margin="20" VerticalOptions="CenterAndExpand" BackgroundColor="White"
+           BorderColor="White">
+        <Frame.Shadow>
+            <Shadow Brush="#10182808" Opacity="0.03" Offset="0,8" />
+        </Frame.Shadow>
+        <VerticalStackLayout>
+            <Frame
+                x:Name="HeaderIconFrame"
+                HeightRequest="88"
+                WidthRequest="88"
+                CornerRadius="50"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                IsClippedToBounds="True"
+                BorderColor="Transparent"
+                Margin="0,12,0,16">
+                <Frame.Triggers>
+                    <DataTrigger TargetType="Frame"
+                                 Binding="{Binding State,Source={x:Reference AlertDialogPopup}}"
+                                 Value="Error">
+                        <Setter Property="BackgroundColor" Value="{StaticResource ErrorBackground}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Frame"
+                                 Binding="{Binding State,Source={x:Reference AlertDialogPopup}}"
+                                 Value="Warning">
+                        <Setter Property="BackgroundColor" Value="{StaticResource WarningBackground}" />
+                    </DataTrigger>
+                </Frame.Triggers>
+                <Image
+                    x:Name="HeaderIcon"
+                    Aspect="AspectFit"
+                    Source="{Binding IconImage,Source={x:Reference AlertDialogPopup}}"
+                    WidthRequest="32"
+                    HeightRequest="32"
+                    VerticalOptions="CenterAndExpand" />
+            </Frame>
+            <Label
+                Text="{Binding HeaderText,Source={x:Reference AlertDialogPopup}}"
+                x:Name="Header"
+                Style="{StaticResource HeaderStyle}"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding State,Source={x:Reference AlertDialogPopup}}"
+                                 Value="Error">
+                        <Setter Property="TextColor" Value="{StaticResource Error}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding State,Source={x:Reference AlertDialogPopup}}"
+                                 Value="Warning">
+                        <Setter Property="TextColor" Value="{StaticResource Warning}" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+            <Label
+                Text="{Binding DescriptionText,Source={x:Reference AlertDialogPopup}}"
+                x:Name="Description"
+                Style="{StaticResource DescriptionStyle}"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" Margin="0,8,0,24" HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center" />
+            <Grid ColumnDefinitions="auto,*" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                  ColumnSpacing="16">
+                <Button Style="{StaticResource CancelButtonStyle}" Text="Cancel" Clicked="Cancel_Button_Clicked"
+                        Padding="24,0" />
+                <Button Grid.Column="1" Style="{StaticResource ActionButtonStyle}" x:Name="ActionButton">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding State,Source={x:Reference AlertDialogPopup}}"
+                                     Value="Error">
+                            <Setter Property="BackgroundColor" Value="{StaticResource Error}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding State,Source={x:Reference AlertDialogPopup}}"
+                                     Value="Warning">
+                            <Setter Property="BackgroundColor" Value="{StaticResource BtnBase}" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </Grid>
+        </VerticalStackLayout>
+    </Frame>
+</mopups:PopupPage>

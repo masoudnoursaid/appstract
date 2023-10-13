@@ -1,0 +1,60 @@
+﻿<MudDialog Class="rounded-12">
+    <DialogContent>
+        <div Class="d-flex flex-column align-center pt-6">
+            @((MarkupString)SvgImage)
+            <MudText Class="typo__med500--5 my-4 purchase-history__details-title" Color="@StatusColor">@PurchaseHistoryResource.YourPaymentWas @Content.PaymentStatusName.ToDescriptionString()</MudText>
+            <MudPaper Elevation="0" Class="mt-4 pa-4 purchase-history__details-paper">
+                <MudGrid Class="px-4 py-1">
+                    <MudItem xs="12" Class="d-flex justify-space-between px-0 py-2">
+                        <MudText>@PurchaseHistoryResource.TransactionId</MudText>
+                        <MudText>
+                            @Content.TrxKey.MakeShortFromBegin(15) <CopyToClipboard Text="@Content.TrxKey"/>
+                        </MudText>
+                    </MudItem>
+                    <MudItem xs="12" Class="d-flex justify-space-between px-0 py-2">
+                        <MudText>@Content.PaymentMethodName @PurchaseHistoryResource.ReferenceId</MudText>
+                        <MudText>
+                            @Content.ReferenceId.MakeShortFromBegin(15) <CopyToClipboard Text="@Content.ReferenceId"/>
+                        </MudText>
+                    </MudItem>
+                    @if (Content.PaymentStatusName == PaymentStatusType.Successful)
+                    {
+                        <MudItem xs="12" Class="d-flex justify-space-between px-0 py-2">
+                            <MudText>@PurchaseHistoryResource.BalanceBefore</MudText>
+                            <MudText>@Content.BalanceBefore.ToFormattedString(Content.BaseCurrency,BaseInfo.UserCulture)</MudText>
+                        </MudItem>
+                        <MudItem xs="12" Class="d-flex justify-space-between px-0 py-2">
+                            <MudText>@PurchaseHistoryResource.BalanceAfter</MudText>
+                            <MudText>@Content.BalanceAfter.ToFormattedString(Content.BaseCurrency,BaseInfo.UserCulture)</MudText>
+                        </MudItem>
+                    }
+                    <MudItem xs="12" Class="d-flex justify-space-between px-0 py-2">
+                        <MudText>@PurchaseHistoryResource.PurchaseAmount</MudText>
+                        <MudText>
+                            @(Content.BaseCurrency == Content.PaymentCurrency || Content.PaymentStatusName != PaymentStatusType.Successful ?
+                                Content.PaymentAmountInOrderCurrency.ToFormattedString(Content.PaymentCurrency,BaseInfo.UserCulture) :
+                                $"{Content.PaymentAmountInOrderCurrency.ToFormattedString(Content.PaymentCurrency,BaseInfo.UserCulture)} @ {Content.ExchangeRate:0.##} = {Content.PaymentAmountInBaseCurrency.ToFormattedString(Content.BaseCurrency,BaseInfo.UserCulture)}")
+                        </MudText>
+                    </MudItem>
+                    @if (Content.PaymentStatusName == PaymentStatusType.Successful && Content.BaseCurrency != Content.PaymentCurrency)
+                    {
+                        <MudItem xs="12" Class="d-flex justify-space-between px-0 py-2">
+                            <MudText>@PurchaseHistoryResource.ExchangeRate</MudText>
+                            <MudText>@string.Format(PurchaseHistoryResource.ExchangeRateContent, Content.PaymentCurrency, Content.BaseCurrency, Content.ExchangeRate.ToString("0.##"))</MudText>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </MudPaper>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Class="ultratone-btn rounded-lg typo__bold700--3 ma-4 purchase-history__details-close-btn"
+                   Color="Color.Transparent"
+                   DisableElevation="true"
+                   OnClick="OnCloseClick"
+                   FullWidth="true"
+                   Variant="Variant.Outlined">
+            @PurchaseHistoryResource.CloseButton
+        </MudButton>
+    </DialogActions>
+</MudDialog>

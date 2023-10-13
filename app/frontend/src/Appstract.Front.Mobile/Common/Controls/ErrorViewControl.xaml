@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Frame
+    x:Class="Appstract.Front.Mobile.Common.Controls.ErrorViewControl"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Padding="10"
+    BackgroundColor="#FBE8E9"
+    CornerRadius="8">
+    <Grid ColumnDefinitions="Auto,*">
+        <Image
+            Grid.Column="0"
+            Margin="0,0,10,0"
+            HeightRequest="19"
+            Source="ic_error.svg"
+            WidthRequest="19" />
+        <VerticalStackLayout Grid.Column="1">
+            <HorizontalStackLayout>
+                <Label
+                    FontSize="12"
+                    Text="Error code: "
+                    TextColor="#8C1D18" />
+                <Label
+                    x:Name="LblCode"
+                    FontSize="12"
+                    TextColor="#8C1D18" />
+            </HorizontalStackLayout>
+            <Label
+                x:Name="LblMessage"
+                FontSize="16"
+                TextColor="#DA1E28" />
+        </VerticalStackLayout>
+    </Grid>
+</Frame>

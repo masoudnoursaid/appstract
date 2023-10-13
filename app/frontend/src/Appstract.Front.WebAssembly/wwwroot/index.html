@@ -1,0 +1,100 @@
+                           <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Appstract</title>
+    <base href="/"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet"/>
+    <link href="_content/Appstract.Front.SharedUI/css/app.css" id="shared-style" rel="stylesheet"/>
+</head>
+
+<body>
+<div id="app">
+    <div class="loader">
+        <div class="loader__header">
+            <div class="loader__title">Please wait</div>
+            <div id="network__quality">
+                <div class="network__status">
+                    <div id="network__status--icon"></div>
+                    <span id="network__status--text"></span>
+                </div>
+                <span id="network__speed"></span>
+            </div>
+        </div>
+        <div id="progress-bar">
+            <div class="indeterminate"></div>
+        </div>
+        <div id="percentage">10%</div>
+        <div id="progress-bar-container">
+            <div id="progressbar" style="width:10%;"></div>
+        </div>
+    </div>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+<script src="_framework/blazor.webassembly.js" autostart="false"></script>
+<script src="_content/MudBlazor/MudBlazor.min.js"></script>
+<script src="_content/Appstract.Front.SharedUI/js/application-insights.js"></script>
+<script src="_content/BlazorApplicationInsights/JsInterop.js"></script>
+<script src="_content/Appstract.Front.SharedUI/js/app.js" id="main-js"></script>
+<script src="_content/Appstract.Front.SharedUI/js/uuid.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.0.0/firebase-app-compat.min.js"
+        integrity="sha512-QxCI6n9lTLJpOHQcpZV2klXd5DhqSrGGe1rU2Cbr9+uCTNozkfbs/w5LVrk/pIgJwd1sFaKtvWGqw3EBtguHcA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.0.0/firebase-messaging-compat.min.js"
+        integrity="sha512-S1ikyG/9rWv+KJjbwHJGTKeYYnmVJxcvgQOBztLUPsRY4ZoSmPK+b8jTiDrt4lSP5SlpkpEQCbhwWQJK+kx7jQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="_content/Appstract.Front.SharedUI/js/firebase-messaging.js"></script>
+
+<script>
+    let cacheBuster;
+
+    function getAppSettings() {
+        return fetch('appsettings.json')
+            .then(response => response.json())
+            .then(data => {
+                return data.AppVersion;
+            });
+    }
+
+    async function fetchAppVersion() {
+        try {
+            cacheBuster = await getAppSettings()
+                .then(appVersion => {
+                    return appVersion;
+                });
+            appendCacheBustingQueryParam();
+        } catch (error) {
+            console.error('Error fetching app settings:', error);
+        }
+    }
+
+    function appendCacheBustingQueryParam() {
+        const link = document.getElementById('shared-style');
+        const script = document.getElementById('main-js');
+       
+        const href = link.getAttribute('href');
+        link.setAttribute('href', href + '?v=' + cacheBuster);
+
+        const src = script.getAttribute('src');
+        script.setAttribute('src', src + '?v=' + cacheBuster);
+    }
+
+    try {
+        fetchAppVersion();
+        StartBlazor();
+        const networkQuality = getNetworkQuality();
+        getNetworkQualityCategory(networkQuality);
+    } catch (error) {
+        console.error('Error fetching app.js:', error);
+    }
+</script>
+</body>
+</html>

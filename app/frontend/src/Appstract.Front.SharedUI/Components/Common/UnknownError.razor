@@ -1,0 +1,23 @@
+﻿@using Appstract.Front.Application.Common.Resources
+@using Appstract.Front.Application.Common.Constants
+<MudPaper Elevation="0" class="unknown-error rounded-lg">
+    @((MarkupString)UltraToneIcons.UNKNOWN_ERROR)
+    <MudText Class="align-self-center my-2 typo__med500--5 typo__body">
+        @UnknownErrorResource.SomethingIsWrong
+    </MudText>
+    <MudText Class="align-self-center typo__reg400--3 color-neutral--200">
+        @UnknownErrorResource.WeWereUnableToConnect
+    </MudText>
+    <MudText Class="align-self-center typo__reg400--3 color-neutral--200">
+        @UnknownErrorResource.ClickRetryToTryAgain
+    </MudText>
+    <MudButton Class="align-self-center my-8 rounded-lg"
+               Color="Color.Primary"
+               StartIcon="@UltraToneIcons.RELOAD"
+               OnClick="@OnRetryClick"
+               DisableElevation="true"
+               Variant="Variant.Filled"
+               Size="Size.Large">
+        @UnknownErrorResource.Retry
+    </MudButton>
+</MudPaper>

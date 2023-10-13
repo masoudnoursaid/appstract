@@ -1,0 +1,13 @@
+steps:
+# Generate LivingDoc
+  - task: SpecFlowPlus@0
+    inputs:
+      generatorSource: 'FeatureFolder'
+      projectFilePath: 'tests/my-project'
+      projectName: 'my-project'
+      testExecutionJson: 'tests/my-project/bin/**/TestExecution.json'
+      projectLanguage: 'en'
+      workItemPrefix: 'WI'
+      workItemUrlTemplate: 'https://dev.azure.com/specflow/LivingDoc/_workitems/edit/{id}'
+      bindingAssemblies: 'tests/my-project/bin/**/my-project.dll'
+

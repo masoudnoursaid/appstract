@@ -1,0 +1,11 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="_ultraToneTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout Class="main bg-light">
+    <MudGrid Spacing="0" Justify="Justify.Center" Class="rounded main__content">
+        @Body
+    </MudGrid>
+</MudLayout>

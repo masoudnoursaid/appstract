@@ -1,0 +1,58 @@
+﻿@import "../Base/variables";
+.personal-info {
+    max-width: 540px;
+}
+
+.personal-info__fullname {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: $color-neutral--900;
+}
+
+.personal-info__paper {
+    background: $color-base--white;
+    border-radius: 12px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+    gap: 8px;
+}
+
+.personal-info__number {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: $color-neutral--500;
+}
+
+.personal-info__email {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: $color-neutral--900;
+}
+.personal-info__subtitle {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: $color-neutral--300;
+}
+
+.personal-info__button {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+}
+

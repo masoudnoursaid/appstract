@@ -1,0 +1,65 @@
+#  This pipeline supports a wide range of actions, which include:
+#  
+#  Generating a custom .pfx file for running containers on HTTPS ports.
+#  Building projects and determining the NuGet command line to push .nupkg packages to the NuGet registry.
+#  Building Docker files for all projects and pushing these images to the Docker registry.
+#  Cleaning up Docker profiles and preparing the pool for running tests against the Docker Compose.
+#  Executing the Docker Compose.
+#  Running Integration tests.
+
+trigger:
+  - task/11339-Update-Helm
+
+pool:
+  vmImage: ubuntu-latest
+  name: Default
+
+variables:
+  - name: DOTNET_VERSION
+    value: '7.0'
+  - name: NUGET_SERVICE_CONNECTION_NAME
+    value: 'nuget'
+
+  - name: CERT_PFX_PATH
+    value: 'cert.pfx'
+  - name: CERT_PFX_PASS
+    value: $(CERT_PFX_PASS_PROTECTED)
+    
+  - name: CHART_PATH
+    value: 'deployment/chart'
+  - name: CHART_DESTINATION
+    value: 'deployment/chart'
+  - name: CHART_NAME
+    value: 'payment-chart'
+  - name: GITLAB_USER
+    value: $(GITLAB_USERNAME)
+  - name: GITLAB_PASS
+    value: $(GITLAB_ACCESSTOKEN)
+  - name: GITLAB_CHART_URL
+    value: 'https://gitlab-registry.maxtld.com/api/v4/projects/29/packages/helm/api/stable/charts'
+    
+steps:
+  
+  - checkout: self
+    fetchDepth: 0
+  
+  - template: ./templates/ci-processes.yml
+    parameters:
+      chartPath: $(CHART_PATH)
+      destination: $(CHART_DESTINATION)
+      chartName: $(CHART_NAME)
+      gitlabUser: $(GITLAB_USER)
+      gitlabPass: $(GITLAB_PASS)
+      gitlabChartUrl: $(GITLAB_CHART_URL)
+      
+      dotnetVersion: $(DOTNET_VERSION)
+      nugetServiceConnectionName: $(NUGET_SERVICE_CONNECTION_NAME)
+      
+      certPfxPath: $(CERT_PFX_PATH)
+      certPfxPass: $(CERT_PFX_PASS)
+      
+      dockerRegistry: $(DOCKER_REGISTRY)
+      dockerUsername: $(DOCKER_USERNAME)
+      dockerPassword: $(DOCKER_PASSWORD)
+      appstractDockerRepo: $(APPSTRACT_DOCKER_REPO)
+

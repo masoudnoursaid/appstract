@@ -1,0 +1,22 @@
+﻿@import "../Base/variables";
+.main {
+    flex-direction: column;
+    min-height: 100vh !important;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -webkit-align-self: stretch;
+    align-self: stretch;
+    overflow: auto;
+
+    .main__content {
+        -webkit-align-content: stretch;
+        align-content: stretch;
+        -webkit-flex: 1 1;
+        flex: 1 1;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+}

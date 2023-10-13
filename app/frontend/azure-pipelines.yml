@@ -1,0 +1,27 @@
+trigger: none
+
+pool:
+  name: 'Default MacOS'
+
+variables:
+- name: nugetServiceConnectionName
+  value: 'clientSdkNugetGitlabRegistryServiceConnection'
+
+steps:
+- task: NuGetAuthenticate@1
+  displayName: 'NuGet Authenticate'
+  inputs:
+    nuGetServiceConnections: $(nugetServiceConnectionName)
+
+- task: DotNetCoreCLI@2
+  name: Build
+  inputs:
+    command: 'build'
+    projects: 'UltraToneFront.sln'
+  
+- task: DotNetCoreCLI@2
+  name: Test
+  inputs:
+    command: 'test'
+    projects: 'UltraToneFront.sln'
+    publishTestResults: false

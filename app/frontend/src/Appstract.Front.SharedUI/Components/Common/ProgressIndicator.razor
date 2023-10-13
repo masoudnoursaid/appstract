@@ -1,0 +1,27 @@
+﻿@using Appstract.Front.Application.Common.Constants
+<div class="d-flex align-center justify-center mb-12 mt-9 @Class">
+    <section class="progress-indicator">
+        @for (var i = 0; i < StepTitles.Count; i++)
+        {
+            <div class="progress-indicator__step @(i == 0 ? "first-step" : "other-step") @(i <= ActiveIndex ? "active" : "")">
+                <div class="progress-indicator__step-icon">
+                    @if (i < ActiveIndex)
+                    {
+                        <MudIcon Icon="@UltraToneIcons.CHECK" Size="Size.Small"/>
+                    }
+                    else
+                    {
+                        @(i + 1)
+                    }
+                </div>
+                <p class="typo__med500--2 @(i < ActiveIndex ? "color-neutral--500" : i == ActiveIndex ? "color-neutral--900" : "color-neutral--300")">
+                    @StepTitles[i]
+                </p>
+            </div>
+            @if (i < StepTitles.Count - 1)
+            {
+                <div class="progress-indicator__indicator-line @(i < ActiveIndex ? "active" : string.Empty)"></div>
+            }
+        }
+    </section>
+</div>

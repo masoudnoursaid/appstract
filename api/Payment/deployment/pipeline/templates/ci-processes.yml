@@ -1,0 +1,71 @@
+parameters:
+  - name: dotnetVersion
+    type: string
+  - name: nugetServiceConnectionName
+    type: string
+
+  - name: certPfxPath
+    type: string
+  - name: certPfxPass
+    type: string
+      
+  - name: dockerRegistry
+    type: string
+  - name: dockerUsername
+    type: string
+  - name: dockerPassword
+    type: string 
+  - name: appstractDockerRepo
+    type: string
+
+  - name: chartPath
+    type: string
+  - name: destination
+    type: string
+  - name: chartName
+    type: string
+  - name: gitlabUser
+    type: string
+  - name: gitlabPass
+    type: string
+  - name: gitlabChartUrl
+    type: string
+
+
+steps:
+
+  - template: ./install-git-version.yml
+
+  - template: ./build.yml
+    parameters:
+      dotnetVersion: ${{ parameters.dotnetVersion }}
+      nugetServiceConnectionName: ${{ parameters.nugetServiceConnectionName }}
+
+  - template: ./dev-certs.yml
+    parameters:
+      certPfxPath: ${{ parameters.certPfxPath }}
+      certPfxPass: ${{ parameters.certPfxPass }}
+
+  - template: ./build-and-push-docker.yml
+    parameters:
+      dockerRegistry: ${{ parameters.dockerRegistry }}
+      dockerUsername: ${{ parameters.dockerUsername }}
+      dockerPassword: ${{ parameters.dockerPassword }}
+      appstractDockerRepo: ${{ parameters.appstractDockerRepo }}
+
+  - template: ./run-tests-and-compose.yml
+    parameters:
+      dotnetVersion: ${{ parameters.dotnetVersion }}
+      certPfxPath: ${{ parameters.certPfxPath }}
+      certPfxPass: ${{ parameters.certPfxPass }}
+      
+  - template: ./deploy-nuget.yml
+  
+  - template: ./helm-package.yml
+    parameters:
+      chartPath: ${{ parameters.chartPath }}
+      destination: ${{ parameters.destination }}
+      chartName: ${{ parameters.chartName }}
+      gitlabUser: ${{ parameters.gitlabUser }}
+      gitlabPass: ${{ parameters.gitlabPass }}
+      gitlabChartUrl: ${{ parameters.gitlabChartUrl }}

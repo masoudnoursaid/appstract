@@ -1,0 +1,20 @@
+﻿@using Appstract.Front.Application.Common.Resources
+
+@if (PagesCount > 1)
+{
+    <div class="d-flex justify-center pt-4 px-4 pb-3 ultratone-table__pagination">
+        <MudPagination
+            SelectedChanged="@SelectedPageChanged"
+            Count="PagesCount"
+            DisableElevation="true"
+            ShowPreviousButton="true"
+            ShowNextButton="true"
+            ShowFirstButton="@(PagesCount > 10)"
+            ShowLastButton="@(PagesCount > 10)"
+            Rectangular="true"
+            BoundaryCount="3"
+            MiddleCount="0"
+            color="@Color.Default"
+            Class=@($"d-flex align-center justify-center {Class}")/>
+    </div>
+}

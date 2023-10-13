@@ -1,0 +1,49 @@
+trigger:
+- develop
+
+pool:
+  name: Default
+  demands:
+    - agent.name -equals MY_WINDOWS_AGENT_NAME
+
+variables:
+- ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
+    - name: sourceBranchName
+      value: 'dev'
+    - name: IdentityName
+      value: 'my.identity.name'
+    - name:  DisplayName
+      value: 'My application'
+
+steps:
+- checkout: self
+  fetchDepth: 0
+
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: Replace tokens
+  inputs:
+    rootDirectory: 'src\my-project\'
+    targetFiles: |
+      my-project.csproj
+      Platforms\Windows\Package.appxmanifest
+    keepToken: true
+    tokenPrefix: __
+    tokenSuffix: __
+
+- task: UseMSStoreCLI@0
+
+- script: |
+    msstore reconfigure --tenantId $(PARTNER_CENTER_TENANT_ID) --sellerId $(PARTNER_CENTER_SELLER_ID) --clientId $(PARTNER_CENTER_CLIENT_ID) --clientSecret $(PARTNER_CENTER_CLIENT_SECRET)
+  displayName: 'Configuring msstore-cli'
+
+- script: |
+    msstore apps list
+  displayName: 'Show apps that are associated with this account'
+
+- script: |
+    msstore package .\src\my-project\ -v 
+  displayName: 'Build msix package'
+
+- script: |
+    msstore publish .\src\my-project\ -v
+  displayName: 'Publish new submission'

@@ -1,0 +1,32 @@
+$TTL 1W
+@	IN	SOA	okd-services.os-rg1.maxtld.dev.	root (
+			2020092301	; serial
+			3H		    ; refresh (3 hours)
+			30M		    ; retry (30 minutes)
+			2W	    	; expiry (2 weeks)
+			1W )		; minimum (1 week)
+	IN	NS	okd-services.os-rg1.maxtld.dev.
+
+okd-services    IN	A	10.10.101.2
+
+api		IN	A	10.10.101.2
+api-int		IN	A	10.10.101.2
+*.apps		IN	A	10.10.101.2
+
+okd-bootstrap 		IN	A	10.10.101.4
+okd-master1		IN	A	10.10.101.10
+okd-master2		IN	A	10.10.101.11
+okd-master3		IN	A	10.10.101.12
+okd-worker1		IN	A	10.10.101.21
+okd-worker2		IN	A	10.10.101.22
+
+etcd-0	IN	A	10.10.101.10
+etcd-1	IN	A	10.10.101.11
+etcd-2	IN	A	10.10.101.12
+okd-console			   IN     A	10.10.101.2
+console-openshift-console.apps     IN     A     10.10.101.2
+oauth-openshift.apps    	   IN     A     10.10.101.2
+
+_etcd-server-ssl._tcp	IN	SRV	0 10 2380 etcd-0.os-rg1.maxtld.dev.
+_etcd-server-ssl._tcp	IN	SRV	0 10 2380 etcd-1.os-rg1.maxtld.dev.
+_etcd-server-ssl._tcp	IN	SRV	0 10 2380 etcd-2.os-rg1.maxtld.dev.

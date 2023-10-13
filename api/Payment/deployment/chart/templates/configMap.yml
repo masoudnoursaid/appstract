@@ -1,0 +1,8 @@
+﻿{{ if .Values.configMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-config
+data:
+  url: {{ .Values.name }}-service
+{{ end }}

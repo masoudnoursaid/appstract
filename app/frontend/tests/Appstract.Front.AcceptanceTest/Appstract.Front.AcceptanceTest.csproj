@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+
+        <RootNamespace>Appstract.AcceptanceTest</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Factories\**" />
+      <Compile Remove="Services\**" />
+      <EmbeddedResource Remove="Factories\**" />
+      <EmbeddedResource Remove="Services\**" />
+      <None Remove="Factories\**" />
+      <None Remove="Services\**" />
+      <Compile Remove="Common\Dto\Login\AccessTokenDto.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Bogus" Version="34.0.1" />
+        <PackageReference Include="bunit.core" Version="1.22.19" />
+        <PackageReference Include="FluentAssertions" Version="6.11.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.10" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+        <PackageReference Include="Microsoft.Playwright" Version="1.29.0" />
+        <PackageReference Include="Moq" Version="4.18.4" />
+        <PackageReference Include="SpecFlow" Version="3.9.74" />
+        <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
+        <PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
+        <PackageReference Include="xunit" Version="2.5.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="3.1.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Appstract.Front.Application\Appstract.Front.Application.csproj" />
+      <ProjectReference Include="..\..\src\Appstract.Front.Domain\Appstract.Front.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Appstract.Front.Infrastructure\Appstract.Front.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\src\Appstract.Front.WebServer\Appstract.Front.WebServer.csproj" />
+      <ProjectReference Include="..\Appstract.Front.TestCommon\Appstract.Front.TestCommon.csproj" />
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <PlaywrightPlatform>all</PlaywrightPlatform>
+    </PropertyGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+﻿parameters:
+  - name: dockerRegistry
+    type: string
+  - name: dockerUsername
+    type: string
+  - name: dockerPassword
+    type: string
+  - name: appstractDockerRepo
+    type: string
+
+
+
+steps:
+
+  - script: docker login ${{ parameters.dockerRegistry }} -u ${{ parameters.dockerUsername }} -p ${{ parameters.dockerPassword }}
+    displayName: 'docker login'
+
+
+  - script: docker build -f ./api/src/Service/Admin.Api/Dockerfile -t ${{ parameters.dockerRegistry }}/${{ parameters.appstractDockerRepo }}/admin.api .
+    displayName: 'build admin api docker'
+  - script: docker push ${{ parameters.dockerRegistry }}/${{ parameters.appstractDockerRepo }}/admin.api
+    displayName: 'push admin api image'
+
+
+
+  - script: docker build -f ./api/src/Service/Payment.Api/Dockerfile -t ${{ parameters.dockerRegistry }}/${{ parameters.appstractDockerRepo }}/payment.api .
+    displayName: 'build payment api docker'
+  - script: docker push ${{ parameters.dockerRegistry }}/${{ parameters.appstractDockerRepo }}/payment.api
+    displayName: 'push payment api image'
+
+
+
+  - script: docker build -f ./api/src/Service/Global.Api/Dockerfile -t ${{ parameters.dockerRegistry }}/${{ parameters.appstractDockerRepo }}/global.api .
+    displayName: 'build global api docker'
+  - script: docker push ${{ parameters.dockerRegistry }}/${{ parameters.appstractDockerRepo }}/global.api
+    displayName: 'push global api image'

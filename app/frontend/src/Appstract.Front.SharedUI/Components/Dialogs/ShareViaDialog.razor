@@ -1,0 +1,40 @@
+﻿<MudDialog Class="share-via__main-dialog">
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" sm="12">
+                <MudText Class="typo__med500--6">@SharedViaResource.Title</MudText>
+            </MudItem>
+            <MudItem xs="12" sm="12" Class="d-flex justify-center">
+                <MudButton OnClick=@(() => ShareMessage("telegram"))>
+                    @((MarkupString)UltraToneIcons.TELEGRAM)
+                </MudButton>
+                <MudButton OnClick=@(() => ShareMessage("whatsapp"))>
+                    @((MarkupString)UltraToneIcons.WHATSAPP)
+                </MudButton>
+                <MudButton OnClick=@(() => ShareMessage("teams"))>
+                    @((MarkupString)UltraToneIcons.MS_TEAMS)
+                </MudButton>
+                <MudButton OnClick=@(() => ShareMessage("twitter"))>
+                    @((MarkupString)UltraToneIcons.TWITTER)
+                </MudButton>
+                <MudButton OnClick=@(() => ShareMessage("gmail"))>
+                    @((MarkupString)UltraToneIcons.GMAIL)
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12" sm="12">
+                <MudText Class="typo__med500--4">
+                @SharedViaResource.OrCopyText
+                </MudText>
+            </MudItem>
+            <MudItem Class="px-0">
+                <MudPaper Class="share-via__content-paper d-flex justify-space-between" Elevation="0">
+                    <MudText Class="typo__reg400--2" disabled="true">@(Content.Length > 35 ? Content[..35] + " ..." : Content)</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCopyClick">@SharedViaResource.Copy</MudButton>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="OnCloseClick" Variant="Variant.Outlined" FullWidth="true">@SharedViaResource.Close</MudButton>
+    </DialogActions>
+</MudDialog>

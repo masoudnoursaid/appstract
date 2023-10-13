@@ -1,0 +1,48 @@
+﻿@using Size = MudBlazor.Size
+@using Color = MudBlazor.Color
+<MudDialog Class="rounded-12">
+    <DialogContent>
+        <MudPaper Elevation="0" class="py-6">
+            <div class="d-flex justify-center mb-4">
+                <MudAvatar Class="d-flex justify-center align-center"
+                           Color="Color.Default"
+                           Size="Size.Large">
+                    <MudIcon Size="Size.Medium" 
+                             Icon="@Icon" 
+                             Color="IconColor"/>
+                </MudAvatar>
+            </div>
+            <MudText Class="@($"my-2 {Class}__title")">
+                @Title
+            </MudText>
+
+            <MudText Class="@($"mb-3 typo__reg400--13 color-neutral--600 {Class}__description")">
+                @Description
+            </MudText>
+
+            <MudText Class="@($"typo__reg400--13 color-neutral--900 {Class}__subtitle")">
+                @Subtitle
+            </MudText>
+
+            <div class="mt-8 d-flex justify-center gap-2">
+                <MudButton Class="@($"ultratone-btn rounded-lg {Class}__button--cancel")"
+                           Color="Color.Transparent"
+                           DisableElevation="true"
+                           OnClick="OnCancelClick"
+                           FullWidth="true">
+                    @CancelButtonText
+                </MudButton>
+                <MudButton OnClick="OnOkClick"
+                           Class="@($"{Class}__button--ok ultratone-btn rounded-lg")"
+                           Color="@IconColor"
+                           DisableElevation="true"
+                           Variant="Variant.Filled"
+                           FullWidth="true">
+                    <MudText>
+                        @OkButtonText
+                    </MudText>
+                </MudButton>
+            </div>
+        </MudPaper>
+    </DialogContent>
+</MudDialog>

@@ -1,0 +1,74 @@
+trigger:
+- devteam/alireza
+- devteam/amir
+- devteam/hamed
+- devteam/hoda
+- devteam/mason
+- devteam/mhs
+- devteam/sadegh
+- devteam/shahriyar
+
+pool:
+  name: 'Default MacOS'
+
+variables:
+- name: registryAddress
+  value: external-url.gitlab-registry.maxtld.com
+- name: imageName
+  value: ultratone/devteam/ultratone-front
+- name: dockerFilePath
+  value: 'src/UltraTone.Account.Client/Dockerfile'
+- name: connectionName
+  value: 'dockerRegistryServiceConnection'
+- name: dotnetVersion
+  value: '7.0.x'
+- name: chartPath
+  value: 'Deployments/helm-charts/dash-front/'
+- name: packageDest
+  value: 'Deployments/helm-charts/'
+- name: chartTag
+  value: $(AssemblySemVer)
+- name: chartName
+  value: dash-frontend-$(AssemblySemVer).tgz
+- name: gitlabChart
+  value: https://gitlab-registry.maxtld.com/api/v4/projects/3/packages/helm/api/$(Build.SourceBranchName)/charts
+- name: imageTag
+  value: $(AssemblySemVer)
+- name: nugetServiceConnectionName
+  value: 'clientSdkNugetGitlabRegistryServiceConnection'
+- name: nugetPackageRegistryUrl
+  value: https://gitlab-registry.maxtld.com/api/v4/projects/12/packages/nuget/index.json
+- name: DOTNET_ROOT
+  value: /usr/local/share/dotnet/
+steps:
+
+# 1. checkout
+- checkout: self
+  fetchDepth: 0
+
+# 2. SourceBranchName
+- task: Bash@3
+  displayName: SourceBranchName
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo $(Build.SourceBranchName)
+
+# 3. start ci processes
+- ${{ if eq(variables['Build.Reason'], 'IndividualCI') }}:
+  - template: ./templates/steps-ci-processes.yml
+    parameters:
+      imageName: $(imageName)
+      dockerFilePath: $(dockerFilePath)
+      connectionName: $(connectionName)  
+      dotnetVersion: $(dotnetVersion)
+      chartPath: $(chartPath)
+      packageDest: $(packageDest)
+      chartTag: $(chartTag)
+      chartName: $(chartName)
+      gitlabChart: $(gitlabChart)
+      imageTag: $(imageTag)
+      gitlabUser: $(gitlabUser)
+      gitlabPass: $(gitlabPass)
+      nugetServiceConnectionName: $(nugetServiceConnectionName)
+

@@ -1,0 +1,31 @@
+﻿@attribute [Route(ROUTE)]
+
+<DashboardWrapper>
+    <Body>
+    <div class="d-flex">
+        <div class="app__content--inner my-8 pa-4">
+            <EditForm Model="Model" OnSubmit="SubmitAsync">
+                <div>
+                    <label>
+                        Birth Year:
+                        <InputNumber @bind-Value="@Model!.BirthYear"/>
+                    </label>
+                </div>
+                <div>
+                    <button type="submit"
+                            style="border: 1px solid gray; border-radius: 4px; padding: 4px;">
+                        Submit
+                    </button>
+                </div>
+            </EditForm>
+            
+            @if (Response != null)
+            {
+                <div>
+                    <span>Your are <strong>@Response.Age</strong> years old.</span>
+                </div>
+            }
+        </div>
+    </div>
+    </Body>
+</DashboardWrapper>

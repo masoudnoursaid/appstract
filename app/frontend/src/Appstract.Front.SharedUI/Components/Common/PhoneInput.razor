@@ -1,0 +1,122 @@
+﻿@using MudBlazor.Utilities
+@using RESTCountries.NET.Models
+@using Appstract.Front.Domain.Models
+
+<MudGrid Spacing="0">
+    <MudItem xs="12">
+        <MudPaper Outlined="true"
+                  Class="@(Name + (_valid ? "__valid callback__phone--valid" : "__invalid") + " d-flex align-center pa-1")">
+            <MudLink Disabled="@IsDisabled" OnClick="OpenCountrySelection" Class=@($"{Name}__flag-btn d-flex align-center ml-1 ")>
+                <MudImage Src="@(SelectedCountry != null ? SelectedCountry.Flag.Svg : "")"
+                          ObjectFit="ObjectFit.Cover"
+                          Elevation="0"
+                          Width="27"
+                          Height="22"
+                          Class="rounded-lg mr-2">
+                </MudImage>
+                <MudPopover Open="_isPopoverOpen"
+                            OverflowBehavior="OverflowBehavior.FlipAlways"
+                            AnchorOrigin="Origin.BottomCenter"
+                            TransformOrigin="Origin.TopCenter"
+                            Delay="0">
+                    <MudPaper Outlined="true" Class="pa-2">
+                        <MudTextField Immediate="true"
+                                      @bind-Value="@SearchText"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Clearable="true"
+                                      AutoFocus="true"
+                                      Class="mr-1 ml-1 country-selection__search-input"/>
+                        <MudContainer Class="country-selection__list-container">
+                            <MudList Clickable="true"
+                                     DisablePadding="false"
+                                     Dense="true"
+                                     DisableGutters="true"
+                                     Class="country-selection__list">
+                                @foreach (var item in FilteredCountries)
+                                {
+                                    <MudListItem Dense="true"
+                                                 OnClick="() => SelectCountry(item)">
+                                        <div class="d-flex align-start">
+                                            <MudImage Src="@item.Flag.Svg"
+                                                      Width="25"
+                                                      Height="18"
+                                                      Elevation="0"
+                                                      Class="rounded-lg mr-3"/>
+                                            <MudText Typo="Typo.caption"
+                                                     Class="country-selection__country-name">
+                                                @(item.Name.Common)
+                                            </MudText>
+                                            <MudText Typo="Typo.caption"
+                                                     Class="ml-2 country-selection__country-code">
+                                                @($" ({GetCountryCode(item)})")
+                                            </MudText>
+                                        </div>
+                                    </MudListItem>
+                                }
+                            </MudList>
+                        </MudContainer>
+                    </MudPaper>
+                </MudPopover>
+                <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Color="Color.Dark"/>
+            </MudLink>
+            <MudAutocomplete
+                @ref="_phoneComponent"
+                T="string"
+                name="@($"{Name}__input")"
+                OnKeyUp="@CheckEnterKeyCallback"
+                OnClearButtonClick="@ClearPhoneNumberCallback"
+                InputMode="InputMode.tel"
+                Class="@($"{Name}__input mr-2 mt-n3")"
+                DisableUnderLine="true"
+                CoerceValue="true"
+                Variant="Variant.Text"
+                ResetValueOnEmptyText="true"
+                Margin="Margin.Dense"
+                Dense="true"
+                Disabled="@IsDisabled"
+                Clearable="true"
+                SelectOnClick="false"
+                SelectValueOnTab="true"
+                OnBlur="PhoneInputBlurred"
+                ValueChanged="PhoneNumberChanged"
+                SearchFunc="@SearchAuthorizedNumbers">
+                <ItemTemplate Context="item">
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudImage Src="@(GetCountryFlag(item))"
+                                  ObjectFit="ObjectFit.Cover"
+                                  Elevation="0"
+                                  Width="27"
+                                  Height="22"
+                                  Class="rounded-lg mr-2"/>
+                        <span>@item</span>
+                    </MudText>
+                </ItemTemplate>
+                <ItemSelectedTemplate Context="item">
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudImage Src="@(GetCountryFlag(item))"
+                                  ObjectFit="ObjectFit.Cover"
+                                  Elevation="0"
+                                  Width="27"
+                                  Height="22"
+                                  Class="rounded-lg mr-2"/>
+                        <span>@item</span>
+                    </MudText>
+                </ItemSelectedTemplate>
+            </MudAutocomplete>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" Class="d-flex justify-start">
+        @if (!IsValid)
+        {
+            <MudText Typo="Typo.caption" Color="@Color.Error">
+                @GetErrorMessage()
+            </MudText>
+        }
+    </MudItem>
+</MudGrid>
+
+@if (_isPopoverOpen)
+{
+    <Overlay OnOverlayClick="@(() => _isPopoverOpen = false)"/>
+}

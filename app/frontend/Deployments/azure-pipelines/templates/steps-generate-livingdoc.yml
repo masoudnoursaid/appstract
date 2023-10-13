@@ -1,0 +1,13 @@
+steps:
+# Generate LivingDoc
+  - task: SpecFlowPlus@0
+    inputs:
+      generatorSource: 'FeatureFolder'
+      projectFilePath: 'tests/UltraTone.AcceptanceTest'
+      projectName: 'UltraTone.AcceptanceTest'
+      testExecutionJson: 'tests/UltraTone.AcceptanceTest/bin/**/TestExecution.json'
+      projectLanguage: 'en'
+      workItemPrefix: 'WI'
+      workItemUrlTemplate: 'https://dev.azure.com/specflow/LivingDoc/_workitems/edit/{id}'
+      bindingAssemblies: 'tests/UltraTone.AcceptanceTest/bin/**/UltraTone.AcceptanceTest.dll'
+

@@ -1,0 +1,30 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim
+
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_DEPTH: 1
+
+stages:
+  - build
+  - tests
+
+
+before_script:
+  - echo "Starting before scripting operation"
+  - dotnet restore --no-cache --force
+  - echo "Ending before scripting operation"
+  
+build:
+  stage: build
+  script:
+    - echo "Starting building project"
+    - dotnet build -c Release -nowarn:CA1303 --no-restore
+    - echo "Ending building project"
+      
+tests:
+  stage: tests
+  script:
+    - echo "Starting running unit tests"
+    - dotnet test --no-restore
+    - echo "Ending running unit tests"

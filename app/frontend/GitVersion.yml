@@ -1,0 +1,38 @@
+mode: MainLine
+assembly-versioning-format: '{MajorMinorPatch}{PreReleaseTagWithDash}'
+branches:
+  main:
+    tag: ''
+    increment: Patch
+    regex: ^prod$
+    is-release-branch: true
+    is-mainline: true
+    pre-release-weight: 0
+    source-branches: []
+  prod-test:
+    tag: 'rc'
+    increment: Patch
+    regex: ^prod-test$
+    is-release-branch: false
+    is-mainline: false
+    pre-release-weight: 10000
+    source-branches:
+      - main
+  develop:
+    tag: 'beta'
+    increment: Patch
+    regex: ^dev(elop)?(ment)?$
+    is-release-branch: false
+    is-mainline: false
+    pre-release-weight: 20000
+    source-branches:
+      - main
+  devteam:
+    tag: 'alpha.{BranchName}'
+    increment: Patch
+    regex: ^devteam/
+    is-release-branch: false
+    is-mainline: false
+    pre-release-weight: 30000
+    source-branches:
+      - main

@@ -1,0 +1,83 @@
+﻿@model Application.Business.Payment.Queries.PaymentVisualize.PaymentVisualizeDto
+
+<section>
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex flex-row align-items-center">
+            <h4 class="text-uppercase mt-1">Azihub</h4>
+            <span class="ms-2 me-3">Pay</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7 col-lg-7 col-xl-6 mb-4 mb-md-0">
+
+            @if (Model.Transaction.Successful)
+            {
+                <h5 class="mb-3 text-success">Transaction Completed</h5>
+            }
+            else
+            {
+                <h5 class="mb-3 text-danger">Transaction Faild</h5>
+            }
+
+            <div>
+                <div class="d-flex justify-content-between">
+                    @if (Model.Transaction.Successful)
+                    {
+                        <div class="d-flex flex-row mt-1">
+                            <h6>Your payment costs</h6>
+                            <h6 class="fw-bold text-success ms-1">@Model.GetCost()</h6>
+                        </div>
+                    }
+
+                </div>
+                <p>
+                    @Model.Transaction.Description
+                </p>
+                <div class="p-2 d-flex justify-content-between align-items-center mb-2" style="background-color: #eee;">
+                    <span>Payment method</span>
+                    <span>@Model.PaymentMethodName @Model.PaymentMethodIcon</span>
+                </div>
+                <div class="p-2 d-flex justify-content-between align-items-center mb-2" style="background-color: #eee;">
+                    <span>Payment Provider Id</span>
+                    <span>@Model.ProvidedId</span>
+                </div>
+
+                <div class="p-2 d-flex justify-content-between align-items-center mb-2" style="background-color: #eee;">
+                    <span>Payment Id</span>
+                    <span>@Model.PaymentId</span>
+                </div>
+
+                <div class="p-2 d-flex justify-content-between align-items-center mb-2" style="background-color: #eee;">
+                    <span>Invoice Number</span>
+                    <span>@Model.Transaction.InvoiceNumber</span>
+                </div>
+                <div class="p-2 d-flex justify-content-between align-items-center mb-2" style="background-color: #eee;">
+                    <span>Completed Date Time</span>
+                    <span>@Model.CompletedDate.ToString("dddd, dd MMMM yyyy HH:mm:ss")</span>
+                </div>
+                <hr>
+
+
+                <a href="@Model.ClientRedirectUrl" class="btn btn-success btn-lg btn-block">Back to website</a>
+            </div>
+        </div>
+        <div class="col-md-5 col-lg-4 col-xl-4 offset-lg-1 offset-xl-2">
+            <div class="p-3" style="background-color: #eee;">
+                <span class="fw-bold">Order Recap</span>
+
+                @foreach (var item in Model.Transaction.Items)
+                {
+                    <div title="@item.Description" style="cursor: pointer" class="poin d-flex justify-content-between mt-2">
+                        <span>@item.Name * @item.Quantity</span> <span>@item.ToString()</span>
+                    </div>
+                }
+
+                <hr>
+                <div class="d-flex justify-content-between mt-2">
+                    <span>Total </span> <span class="@(Model.Transaction.Successful ? "text-success" : "text-danger")">@Model.GetCost()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

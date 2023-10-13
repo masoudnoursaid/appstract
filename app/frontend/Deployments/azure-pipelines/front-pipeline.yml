@@ -1,0 +1,67 @@
+trigger:
+- development
+- prod-test
+- prod
+
+pool:
+  name: 'Default MacOS'
+
+variables:
+- ${{ if eq(variables['Build.SourceBranchName'], 'development') }}:
+    - name: sourceBranchName
+      value: dev
+- ${{ else }}:
+    - name: sourceBranchName
+      value: $(Build.SourceBranchName)
+- name: registryAddress
+  value: external-url.gitlab-registry.maxtld.com
+- name: imageName
+  value: ultratone/ultratone-front-blazor
+- name: dockerFilePath
+  value: 'src/UltraTone.Account.Client/Dockerfile'
+- name: connectionName
+  value: 'dockerRegistryServiceConnection'
+- name: dotnetVersion
+  value: '7.0.x'
+- name: chartPath
+  value: 'Deployments/helm-charts/dash-front/'
+- name: packageDest
+  value: 'Deployments/helm-charts/'
+- name: chartTag
+  value: $(AssemblySemVer)
+- name: chartName
+  value: dash-frontend-$(AssemblySemVer).tgz
+- name: gitlabChart
+  value: https://gitlab-registry.maxtld.com/api/v4/projects/7/packages/helm/api/$(sourceBranchName)/charts
+- name: imageTag
+  value: $(AssemblySemVer)
+- name: nugetServiceConnectionName
+  value: 'clientSdkNugetGitlabRegistryServiceConnection'
+- name: nugetPackageRegistryUrl
+  value: https://gitlab-registry.maxtld.com/api/v4/projects/12/packages/nuget/index.json
+- name: DOTNET_ROOT
+  value: /usr/local/share/dotnet/
+steps:
+
+# 1. checkout
+- checkout: self
+  fetchDepth: 0
+
+# 2. start ci processes
+- ${{ if eq(variables['Build.Reason'], 'IndividualCI') }}:
+  - template: ./templates/steps-ci-processes.yml
+    parameters:
+      imageName: $(imageName)
+      dockerFilePath: $(dockerFilePath)
+      connectionName: $(connectionName)  
+      dotnetVersion: $(dotnetVersion)
+      chartPath: $(chartPath)
+      packageDest: $(packageDest)
+      chartTag: $(chartTag)
+      chartName: $(chartName)
+      gitlabChart: $(gitlabChart)
+      imageTag: $(imageTag)
+      gitlabUser: $(gitlabUser)
+      gitlabPass: $(gitlabPass)
+      nugetServiceConnectionName: $(nugetServiceConnectionName)
+
